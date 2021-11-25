@@ -1,0 +1,252 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+	<div class="title">
+			<div class="task-title">
+				
+				<h3>MY SUBSCRIPTIONS</h3>
+			</div>
+			
+		</div>
+
+		<div id="tasks_id" class="tasks owl-carousel owl-theme">
+			<div class="task">
+				<img src="{% static 'images/kplc.jpeg' %}" alt="">
+			</div>
+
+			<div class="task">
+				<img src="{% static 'images/dstv.jpg' %}" alt="">
+			</div>
+
+			<div class="task">
+				<img src="{% static 'images/water.png' %}" alt="">
+			</div>
+
+			<div class="task">
+				
+			</div>
+
+
+		</div>
+
+		<div class="second-row">
+			<div class="crop-section">
+				<h3>Pending Bills</h3>
+
+				<table class="table table-striped">
+				  <thead>
+				    <tr>
+				    	<th scope="col">#</th>
+				      <th scope="col">Bill</th>
+				      <th scope="col">Month</th>
+				      <th scope="col">Amount</th>
+				      <th scope="col">Paybale</th>
+				      <th scope="col">Pay</th>
+				      <th scope="col">Delete</th>
+				    </tr>
+				  </thead>
+				  <tbody>
+				    <tr>
+				      <th scope="row">1</th>
+				      <td>
+				      	<img src="{% static 'images/kplc.jpeg' %}" alt="bill">
+				      </td>
+				      <td>November</td>
+				      <td>1000</td>
+				      <td>1200</td>
+				      <td>
+				      	<button type="button" class="btn btn-success">Pay</button>
+				      </td>
+				      <td>
+				      	<button type="button" class="btn btn-danger">Del</button>
+				      </td>
+				    </tr>
+				    <tr>
+				      <th scope="row">2</th>
+				      <td>
+				      	<img src="{% static 'images/dstv.jpg' %}" alt="bill" >
+				      </td>
+				      <td>November</td>
+				      <td>700</td>
+				      <td>700</td>
+				      <td>
+				      	<button type="button" class="btn btn-success">Pay</button>
+				      </td>
+				      <td>
+				      	<button type="button" class="btn btn-danger">Del</button>
+				      </td>
+				    </tr>
+				    <tr>
+				      <th scope="row">3</th>
+				      <td>
+				      	<img src="{% static 'images/water.png' %}" alt="bill">
+				      </td>
+				      <td>November</td>
+				      <td>3250</td>
+				      <td>2000</td>
+				      <td>
+				      	<button type="button" class="btn btn-success">Pay</button>
+				      </td>
+				      <td>
+				      	<button type="button" class="btn btn-danger">Del</button>
+				      </td>
+				    </tr>
+				  </tbody>
+				</table>
+
+				<!--
+				<div class="crops">
+					<div class="crop">
+						<div class="head">
+							<div class="text">
+								<h4>Maize</h4>
+								<p>A dry condition crop</p>
+							</div>
+							<div class="image">
+								<img src="./images/maize.jpg" alt="">
+							</div>
+							
+						</div>
+
+						<div class="timeline">
+							<div class="start">
+								<h5>Start Date</h5>
+								<p>10/05/2021</p>
+							</div>
+							<div class="end">
+								<h5>End Date(Approx)</h5>
+								<p>10/11/2021</p>
+							</div>
+						</div>
+						<div class="next">
+							<a href="">
+								<ion-icon name="arrow-forward-outline"></ion-icon>
+							</a>
+						</div>
+					</div>
+
+					<div class="crop">
+						<div class="head">
+							<div class="text">
+								<h4>Coffee</h4>
+								<p>A dry condition crop</p>
+							</div>
+							<div class="image">
+								<img src="./images/coffee.jpg" alt="">
+							</div>
+							
+						</div>
+
+						<div class="timeline">
+							<div class="start">
+								<h5>Start Date</h5>
+								<p>10/05/2021</p>
+							</div>
+							<div class="end">
+								<h5>End Date(Approx)</h5>
+								<p>10/11/2021</p>
+							</div>
+						</div>
+						<div class="next">
+							<a href="">
+								<ion-icon name="arrow-forward-outline"></ion-icon>
+							</a>
+						</div>
+					</div>
+
+				</div>  -->
+			</div>
+
+			<div class="graph">
+				<h3>Payment Graph</h3>
+				<canvas id="myChart" style="width:100%;width:400px"></canvas>
+			</div>
+		</div>
+
+
+		<div class="third-row">
+			<h3>Upcoming Bills</h3>
+			<table class="table table-striped">
+			  <thead>
+			    <tr>
+			    	<th scope="col">#</th>
+			      <th scope="col">Bill</th>
+			      <th scope="col">Month</th>
+			      <th scope="col">Amount</th>
+			      <th scope="col">Paybale</th>
+			      <th scope="col">Pay</th>
+			    </tr>
+			  </thead>
+			  <tbody>
+			    <tr>
+			      <th scope="row">1</th>
+			      <td>
+			      	<img src="{% static 'images/kplc.jpeg' %}" alt="bill">
+			      </td>
+			      <td>November</td>
+			      <td>1000</td>
+			      <td>1200</td>
+			      <td>
+			      	<button type="button" class="btn btn-success">Pay</button>
+			      </td>
+			     
+			    </tr>
+			    <tr>
+			      <th scope="row">2</th>
+			      <td>
+			      	<img src="{% static 'images/dstv.jpg' %}" alt="bill" >
+			      </td>
+			      <td>November</td>
+			      <td>700</td>
+			      <td>700</td>
+			      <td>
+			      	<button type="button" class="btn btn-success">Pay</button>
+			      </td>
+			     
+			    </tr>
+			    <tr>
+			      <th scope="row">3</th>
+			      <td>
+			      	<img src="{% static 'images/water.png' %}" alt="bill">
+			      </td>
+			      <td>November</td>
+			      <td>3250</td>
+			      <td>2000</td>
+			      <td>
+			      	<button type="button" class="btn btn-success">Pay</button>
+			      </td>
+			     
+			    </tr>
+			  </tbody>
+			</table>
+		</div>
+{% endblock %}
+
+{% block scripts %}
+	<script>
+		var xValues = [100,200,300,400,500,600,700,800,900,1000];
+
+		new Chart("myChart", {
+		  type: "line",
+		  data: {
+		    labels: xValues,
+		    datasets: [{
+		      data: [860,1140,1060,1060,1070,1110,1330,2210,7830,2478],
+		      borderColor: "red",
+		      fill: false
+		    },{
+		      data: [1600,1700,1700,1900,2000,2700,4000,5000,6000,7000],
+		      borderColor: "green",
+		      fill: false
+		    },{
+		      data: [300,700,2000,5000,6000,4000,2000,1000,200,100],
+		      borderColor: "blue",
+		      fill: false
+		    }]
+		  },
+		  options: {
+		    legend: {display: false}
+		  }
+		});
+	</script>
+{% endblock %}

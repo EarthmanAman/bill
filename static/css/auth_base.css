@@ -1,0 +1,24 @@
+body {
+	margin: 0px;
+	padding: 0px;
+	background: #f8f9fa;
+}
+
+.content-box {
+	position: absolute;
+	top: 20%;
+	left: 20%;
+	width: 60%;
+	height: 70%;
+	background: #ffffff;
+	box-shadow: 0 3px 5px rgb(0 0 0 / 0.2);
+}
+
+.navbar {
+	margin-left: 150px !important;
+}
+
+.navbar-brand {
+	font-size: 30px !important;
+	font-weight: bold;
+}

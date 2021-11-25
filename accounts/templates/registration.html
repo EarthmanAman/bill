@@ -1,0 +1,68 @@
+{% extends 'auth_base.html'%}
+
+{% load static %}
+
+{% block title%}
+	<title>Registration</title>
+{% endblock %}
+
+{% block custom_css %}
+	<link rel="stylesheet" href="{%static 'css/registration.css'%}">
+{% endblock %}
+
+{% block content %}
+	<div class="content">
+		<div class="form-section">
+			<h3>Let's Sign you Up <span>&#9997;</span></h3>
+			<form action="" method="post">
+				{% csrf_token %}
+				<div class="row">
+					<div class="col-lg-6">
+						<div class="mb-3">
+						  <input class="form-control form-control-sm" type="text" placeholder="First Name" aria-label=".form-control-sm example" name="first_name">
+						</div>
+					</div>
+
+					<div class="col-lg-6">
+						<div class="mb-3">
+						  <input class="form-control form-control-sm" type="text" placeholder="Last Name" aria-label=".form-control-sm example" name="last_name">
+						</div>
+					</div>
+
+				</div>
+
+				<div class="mb-3">
+				  <input class="form-control form-control-sm" type="email" placeholder="Email Address" aria-label=".form-control-sm example" name="email">
+				</div>
+
+				<div class="input-group input-group-sm mb-3">
+					<span class="input-group-text" id="inputGroup-sizing-sm">+254</span>
+					<input type="number" class="form-control" aria-label="Sizing example input" 
+					placeholder="Phone number" 
+					aria-describedby="inputGroup-sizing-sm" name="phone_number">
+					<div id="emailHelp" class="form-text">Make sure this number is registered with Mpesa.</div>
+				</div>
+
+				<div class="mb-3">
+				  <input class="form-control form-control-sm" type="Password" placeholder="Password" aria-label=".form-control-sm example" name="password">
+				</div>
+
+				<div class="mb-3">
+				  <input class="form-control form-control-sm" type="Password" placeholder="Confirm Password" aria-label=".form-control-sm example" name="confirm_password">
+				</div>
+				<div class="bottom">
+					<button type="submit" class="btn btn-primary">Sign Up</button>
+					<p>Already have an account? <a href="{% url 'accounts:login'%}">Login</a></p>
+				</div>
+				
+			</form>
+		</div>
+		<div class="image-section">
+			<img src="{%static 'images/signup-image.jpg'%}">
+			<div class="text">
+				<h4>Your Bills Your Responsibilities</h4>
+				<hr>
+			</div>
+		</div>
+	</div>
+{% endblock %}

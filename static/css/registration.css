@@ -1,0 +1,81 @@
+.navbar {
+	margin-left: 150px !important;
+	margin-top: 50px;
+}
+
+.navbar-brand {
+	font-size: 30px !important;
+	font-weight: bold;
+}
+
+.content {
+	display: flex;
+	padding: 40px 100px;
+	width: 100%;
+	height: 100%;
+}
+
+.content .form-section {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	
+	justify-content: center;
+}
+
+.content .form-section h3 {
+	font-weight: bold;
+	margin-top: 20px;
+	margin-bottom: 30px;
+}
+
+.form-control {
+	border: 1px solid #0077b6 !important;
+}
+
+.btn-primary {
+	background-color: #0077b6 !important;
+}
+
+.bottom {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.bottom p {
+	font-size: 12px;
+}
+
+.content .image-section {
+	flex: 1;
+	width: 100%;
+	height: 100%;
+	position: relative;
+}
+
+.content .image-section img {
+	width: 80%;
+	position: absolute;
+	bottom: 5%;
+	left: 30%;
+}
+
+.content .image-section .text {
+	position: absolute;
+	top: : 10%;
+	left: 60%;
+}
+
+.content .image-section .text h4 {
+	font-weight: bold;
+	color: #fb8500;
+}
+
+.content .image-section .text hr {
+	width: 40px;
+	height: 3px;
+	position: absolute;
+	right: 0px;
+	background: #0077b6;
+}
