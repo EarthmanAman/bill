@@ -1,0 +1,152 @@
+{% extends "base.html" %}
+{% load static %}
+{% block custom_css %}
+	<link rel="stylesheet" type="text/css" href="{% static 'css/profile.css' %}">
+{% endblock %}
+{% block content %}
+	<div class="" style="margin-bottom: 30px">
+		<h3 style="font-size: 25px; color: #272f07">MY PROFILE</h3>
+		<hr style="width: 40px; height: 2px">
+	</div>
+	
+	<div class="profile-main">
+		<div class="info-section">
+			<div class="table">
+				<table class="table table-striped">
+				  <thead>
+				    <tr>
+				    	<th scope="col">Info</th>
+				      <th scope="col">Value</th>
+				    </tr>
+				  </thead>
+				  <tbody>
+				    <tr>
+				      <th scope="row">First Name</th>
+				      <td>
+				      	{{user.first_name}}
+				      </td>
+				     
+				    </tr>
+				    <tr>
+				      <th scope="row">Last Name</th>
+				      <td>
+				      	{{user.last_name}}
+				      </td>
+				    </tr>
+				    <tr>
+				      <th scope="row">Email Address</th>
+				      <td>
+				      	{{user.email}}
+				      </td>
+				    </tr>
+				    <tr>
+				      <th scope="row">Phone Number</th>
+				      <td>
+				      	{{user.phone_number}}
+				      </td>
+				    </tr>
+				  </tbody>
+				</table>
+			</div>
+
+			<div class="recent-transactions">
+				<br>
+				<h3>Recent Transactions</h3>	
+
+				<ul class="list-group">
+				  <li class="list-group-item d-flex justify-content-between align-items-center">
+				    KPLC
+				    <span class="badge bg-primary rounded-pill">Kshs. 14OO</span>
+				  </li>
+				  <li class="list-group-item d-flex justify-content-between align-items-center">
+				    Water Bill
+				    <span class="badge bg-primary rounded-pill">Kshs. 800</span>
+				  </li>
+				  <li class="list-group-item d-flex justify-content-between align-items-center">
+				    DSTV
+				    <span class="badge bg-primary rounded-pill">Kshs. 1000</span>
+				  </li>
+				</ul>
+			</div>
+		</div>
+		<div class="update-section">
+
+			<div class="form">
+				<h3>Update Information</h3>
+				<form action="" method="post">
+					{% csrf_token %}
+					<div class="row">
+						<div class="col-lg-6">
+							<div class="mb-3">
+								 <label for="exampleFormControlInput1" class="form-label">First Name</label>
+							  <input class="form-control form-control-sm" type="text" placeholder="First Name" aria-label=".form-control-sm example" name="first_name" value="{{user.first_name}}">
+							</div>
+						</div>
+
+						<div class="col-lg-6">
+							<div class="mb-3">
+								 <label for="exampleFormControlInput1" class="form-label">Last Name</label>
+							  <input class="form-control form-control-sm" type="text" placeholder="Last Name" aria-label=".form-control-sm example" name="last_name" value="{{user.last_name}}">
+							</div>
+						</div>
+
+					</div>
+
+					<div class="mb-3">
+						 <label for="exampleFormControlInput1" class="form-label">Email address</label>
+					  <input class="form-control form-control-sm" type="email" placeholder="Email Address" aria-label=".form-control-sm example" name="email" value="{{user.email}}">
+					</div>
+					
+					 <label for="exampleFormControlInput1" class="form-label">Phone Number</label>
+					<div class="input-group input-group-sm mb-3">
+
+						<span class="input-group-text" id="inputGroup-sizing-sm">+254</span>
+						<input type="number" class="form-control" aria-label="Sizing example input" 
+						placeholder="Phone number" 
+						aria-describedby="inputGroup-sizing-sm" name="phone_number" value="{{user.phone_number}}">
+
+						
+					</div>
+					<div id="emailHelp" class="form-text">Make sure this number is registered with Mpesa.</div> <br>
+					
+					<div class="bottom">
+						<button type="submit" class="btn btn-primary">Update</button>
+					</div>
+					
+				</form>
+			</div>
+
+			<div class="form">
+				<h3>Update Password</h3>
+				<form action="" method="post">
+					{% csrf_token %}
+
+					<div class="mb-3">
+						 <label for="exampleFormControlInput1" class="form-label">Old Password</label>
+					  <input class="form-control form-control-sm" type="text" placeholder="Old Password" aria-label=".form-control-sm example" name="old_password">
+					</div>
+					
+					<div class="mb-3">
+						 <label for="exampleFormControlInput1" class="form-label">New Password</label>
+					  <input class="form-control form-control-sm" type="Password" placeholder="New Password" aria-label=".form-control-sm example" name="new_password">
+					</div>
+
+					<div class="mb-3">
+						 <label for="exampleFormControlInput1" class="form-label">Confirm New Password</label>
+					  <input class="form-control form-control-sm" type="Password" placeholder="Confirm New Password" aria-label=".form-control-sm example" name="confirm_new_password">
+					</div>
+					
+					<div class="bottom">
+						<button type="submit" class="btn btn-primary">Update Password</button>
+					</div>
+					
+				</form>
+			</div>
+			
+		</div>
+	</div>
+{% endblock %}
+
+{% block scripts %}
+	
+{% endblock %}

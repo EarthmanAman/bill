@@ -45,3 +45,9 @@ def login_user(request):
 			next_endpoint = request.GET.get("next", '')
 			return redirect("/")
 	return render(request, template_name)
+
+
+def logout_user(request):
+	logout(request)
+	return redirect("accounts:login")
+

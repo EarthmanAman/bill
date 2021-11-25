@@ -23,6 +23,9 @@
     <link rel="stylesheet" href="{% static 'css/owl.theme.default.min.css' %}">
 
 	<link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}">
+
+	{% block custom_css%}
+	{% endblock %}
 	
 	<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
@@ -31,7 +34,7 @@
 <body>
 
 	<div class="container-fluid">
-		<nav class="navbar navbar-light bg-transparent fixed-top">
+		<nav class="navbar navbar-light fixed-top" style="background: #ffffff">
 		  <div class="container-fluid">
 		    <a class="navbar-brand" href="#">
 		      <img src="{% static 'images/reg.svg' %}" alt="" width="50" class="d-inline-block align-text-top">
@@ -42,7 +45,7 @@
 	</div>
 	<div class="navigation">
 		<ul>
-			<li class="list active">
+			<li class="list {% if nbar == 'home' %}active{% endif %}">
 				<b></b>
 				<b></b>
 				<a href="{% url 'main:index'%}">
@@ -53,7 +56,7 @@
 				</a>
 			</li>
 
-			<li class="list">
+			<li class="list {% if nbar == 'invoices' %}active{% endif %}">
 				<b></b>
 				<b></b>
 				<a href="{% url 'main:invoices'%}">
@@ -63,7 +66,7 @@
 					<span class="title">Invoices</span>
 				</a>
 			</li>
-
+			<!--
 			<li class="list">
 				<b></b>
 				<b></b>
@@ -73,7 +76,7 @@
 					</span>
 					<span class="title">Summary</span>
 				</a>
-			</li>
+			</li> -->
 		<!--
 			<li class="list">
 				<b></b>
@@ -86,10 +89,10 @@
 				</a>
 			</li> -->
 
-			<li class="list">
+			<li class="list  {% if nbar == 'profile' %}active{% endif %}">
 				<b></b>
 				<b></b>
-				<a href="#">
+				<a href="{% url 'main:profile'%}">
 					<span class="icon">
 						<ion-icon name="person-outline"></ion-icon>
 					</span>
@@ -100,7 +103,7 @@
 			<li class="list">
 				<b></b>
 				<b></b>
-				<a href="#">
+				<a href="{% url 'accounts:logout'%}">
 					<span class="icon">
 						<ion-icon name="log-out-outline"></ion-icon>
 					</span>

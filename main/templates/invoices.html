@@ -1,6 +1,15 @@
 {% extends "base.html" %}
 {% load static %}
 {% block content %}
+	<div class="" style="margin-bottom: 30px; display: flex; justify-content: space-between;">
+		<h3 style="font-size: 25px; color: #272f07">MONTHLY INVOICES</h3>
+		<hr style="width: 40px; height: 2px">
+		<form class="d-flex">
+	        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+	        <button class="btn btn-outline-success" type="submit">Search</button>
+	      </form>
+	</div>
+	
 	<div class="third-row">
 		<h3>November</h3>
 		<table class="table table-striped">
@@ -8,10 +17,10 @@
 		    <tr>
 		    	<th scope="col">#</th>
 		      <th scope="col">Bill</th>
-		      <th scope="col">Month</th>
+		      <th scope="col">Date</th>
 		      <th scope="col">Amount</th>
-		      <th scope="col">Paybale</th>
-		      <th scope="col">Pay</th>
+		      <th scope="col">Balance</th>
+		      <th scope="col">Print</th>
 		    </tr>
 		  </thead>
 		  <tbody>
@@ -20,11 +29,11 @@
 		      <td>
 		      	<img src="{% static 'images/kplc.jpeg' %}" alt="bill">
 		      </td>
-		      <td>November</td>
+		      <td>12/11/2021</td>
 		      <td>1000</td>
-		      <td>1200</td>
+		      <td>00</td>
 		      <td>
-		      	<button type="button" class="btn btn-success">Pay</button>
+		      	<button type="button" class="btn btn-success">Print</button>
 		      </td>
 		     
 		    </tr>
@@ -33,24 +42,23 @@
 		      <td>
 		      	<img src="{% static 'images/dstv.jpg' %}" alt="bill" >
 		      </td>
-		      <td>November</td>
-		      <td>700</td>
-		      <td>700</td>
+		      <td>12/11/2021</td>
+		      <td>1000</td>
+		      <td>00</td>
 		      <td>
-		      	<button type="button" class="btn btn-success">Pay</button>
+		      	<button type="button" class="btn btn-success">Print</button>
 		      </td>
-		     
 		    </tr>
 		    <tr>
 		      <th scope="row">3</th>
 		      <td>
 		      	<img src="{% static 'images/water.png' %}" alt="bill">
 		      </td>
-		      <td>November</td>
-		      <td>3250</td>
-		      <td>2000</td>
+		      <td>12/11/2021</td>
+		      <td>1000</td>
+		      <td>00</td>
 		      <td>
-		      	<button type="button" class="btn btn-success">Pay</button>
+		      	<button type="button" class="btn btn-success">Print</button>
 		      </td>
 		     
 		    </tr>
@@ -65,10 +73,10 @@
 		    <tr>
 		    	<th scope="col">#</th>
 		      <th scope="col">Bill</th>
-		      <th scope="col">Month</th>
+		      <th scope="col">Date</th>
 		      <th scope="col">Amount</th>
-		      <th scope="col">Paybale</th>
-		      <th scope="col">Pay</th>
+		      <th scope="col">Balance</th>
+		      <th scope="col">Print</th>
 		    </tr>
 		  </thead>
 		  <tbody>
@@ -77,11 +85,11 @@
 		      <td>
 		      	<img src="{% static 'images/kplc.jpeg' %}" alt="bill">
 		      </td>
-		      <td>November</td>
+		      <td>12/11/2021</td>
 		      <td>1000</td>
-		      <td>1200</td>
+		      <td>00</td>
 		      <td>
-		      	<button type="button" class="btn btn-success">Pay</button>
+		      	<button type="button" class="btn btn-success">Print</button>
 		      </td>
 		     
 		    </tr>
@@ -90,24 +98,23 @@
 		      <td>
 		      	<img src="{% static 'images/dstv.jpg' %}" alt="bill" >
 		      </td>
-		      <td>November</td>
-		      <td>700</td>
-		      <td>700</td>
+		      <td>12/11/2021</td>
+		      <td>1000</td>
+		      <td>00</td>
 		      <td>
-		      	<button type="button" class="btn btn-success">Pay</button>
+		      	<button type="button" class="btn btn-success">Print</button>
 		      </td>
-		     
 		    </tr>
 		    <tr>
 		      <th scope="row">3</th>
 		      <td>
 		      	<img src="{% static 'images/water.png' %}" alt="bill">
 		      </td>
-		      <td>November</td>
-		      <td>3250</td>
-		      <td>2000</td>
+		      <td>12/11/2021</td>
+		      <td>1000</td>
+		      <td>00</td>
 		      <td>
-		      	<button type="button" class="btn btn-success">Pay</button>
+		      	<button type="button" class="btn btn-success">Print</button>
 		      </td>
 		     
 		    </tr>
@@ -122,10 +129,10 @@
 		    <tr>
 		    	<th scope="col">#</th>
 		      <th scope="col">Bill</th>
-		      <th scope="col">Month</th>
+		      <th scope="col">Date</th>
 		      <th scope="col">Amount</th>
-		      <th scope="col">Paybale</th>
-		      <th scope="col">Pay</th>
+		      <th scope="col">Balance</th>
+		      <th scope="col">Print</th>
 		    </tr>
 		  </thead>
 		  <tbody>
@@ -134,11 +141,11 @@
 		      <td>
 		      	<img src="{% static 'images/kplc.jpeg' %}" alt="bill">
 		      </td>
-		      <td>November</td>
+		      <td>12/11/2021</td>
 		      <td>1000</td>
-		      <td>1200</td>
+		      <td>00</td>
 		      <td>
-		      	<button type="button" class="btn btn-success">Pay</button>
+		      	<button type="button" class="btn btn-success">Print</button>
 		      </td>
 		     
 		    </tr>
@@ -147,24 +154,23 @@
 		      <td>
 		      	<img src="{% static 'images/dstv.jpg' %}" alt="bill" >
 		      </td>
-		      <td>November</td>
-		      <td>700</td>
-		      <td>700</td>
+		      <td>12/11/2021</td>
+		      <td>1000</td>
+		      <td>00</td>
 		      <td>
-		      	<button type="button" class="btn btn-success">Pay</button>
+		      	<button type="button" class="btn btn-success">Print</button>
 		      </td>
-		     
 		    </tr>
 		    <tr>
 		      <th scope="row">3</th>
 		      <td>
 		      	<img src="{% static 'images/water.png' %}" alt="bill">
 		      </td>
-		      <td>November</td>
-		      <td>3250</td>
-		      <td>2000</td>
+		      <td>12/11/2021</td>
+		      <td>1000</td>
+		      <td>00</td>
 		      <td>
-		      	<button type="button" class="btn btn-success">Pay</button>
+		      	<button type="button" class="btn btn-success">Print</button>
 		      </td>
 		     
 		    </tr>

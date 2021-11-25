@@ -10,7 +10,7 @@ body {
 }
 
 .navbar {
-	margin-top: 10px;
+	
 	margin-left: 20px !important;
 	box-shadow: 0 3px 5px rgb(0 0 0 / 0.2);
 }
@@ -20,7 +20,7 @@ body {
 }
 .navigation {
 	position: fixed;
-	top: 100px;
+	top: 90px;
 	left: 20px;
 	bottom: 20px;
 	width: 200px;
@@ -181,7 +181,7 @@ body {
 .home-main {
 	background: #fdfdfe;
 	position: relative;
-	top: 100px;
+	top: 80px;
 	margin-left: 250px;
 	width: 80%;
 	padding: 10px 50px;
