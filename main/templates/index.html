@@ -1,5 +1,20 @@
 {% extends "base.html" %}
 {% load static %}
+{% block custom_css %}
+	<style>
+		.modal-content {
+			background-color: #f8f9fa !important;
+			padding: 30px;
+		}
+
+		.modal-content h5 {
+			text-align: center;
+			text-transform: uppercase;
+			font-weight: bold;
+			color: #3A579E
+		}
+	</style>
+{% endblock%}
 {% block content %}
 	<div class="title">
 			<div class="task-title">
@@ -10,21 +25,18 @@
 		</div>
 
 		<div id="tasks_id" class="tasks owl-carousel owl-theme">
+			{% for my_subscription in my_subscriptions %}
 			<div class="task">
-				<img src="{% static 'images/kplc.jpeg' %}" alt="">
+				<img src="{{my_subscription.subscription.pic.url}}" alt="">
 			</div>
+			{% endfor %}
 
-			<div class="task">
-				<img src="{% static 'images/dstv.jpg' %}" alt="">
-			</div>
-
-			<div class="task">
-				<img src="{% static 'images/water.png' %}" alt="">
-			</div>
-
-			<div class="task">
+			<button class="task" data-bs-toggle="modal" data-bs-target="#exampleModal">
+				<div class="add" >
+					<ion-icon name="add-circle-outline"></ion-icon>
+				</div>
 				
-			</div>
+			</button>
 
 
 		</div>
@@ -46,115 +58,28 @@
 				    </tr>
 				  </thead>
 				  <tbody>
-				    <tr>
-				      <th scope="row">1</th>
-				      <td>
-				      	<img src="{% static 'images/kplc.jpeg' %}" alt="bill">
-				      </td>
-				      <td>November</td>
-				      <td>1000</td>
-				      <td>1200</td>
-				      <td>
-				      	<button type="button" class="btn btn-success">Pay</button>
-				      </td>
-				      <td>
-				      	<button type="button" class="btn btn-danger">Del</button>
-				      </td>
-				    </tr>
-				    <tr>
-				      <th scope="row">2</th>
-				      <td>
-				      	<img src="{% static 'images/dstv.jpg' %}" alt="bill" >
-				      </td>
-				      <td>November</td>
-				      <td>700</td>
-				      <td>700</td>
-				      <td>
-				      	<button type="button" class="btn btn-success">Pay</button>
-				      </td>
-				      <td>
-				      	<button type="button" class="btn btn-danger">Del</button>
-				      </td>
-				    </tr>
-				    <tr>
-				      <th scope="row">3</th>
-				      <td>
-				      	<img src="{% static 'images/water.png' %}" alt="bill">
-				      </td>
-				      <td>November</td>
-				      <td>3250</td>
-				      <td>2000</td>
-				      <td>
-				      	<button type="button" class="btn btn-success">Pay</button>
-				      </td>
-				      <td>
-				      	<button type="button" class="btn btn-danger">Del</button>
-				      </td>
-				    </tr>
+
+				  	{% for pending_bill in pending_bills%}
+					    <tr>
+					      <th scope="row">1</th>
+					      <td>
+					      	<img src="{{pending_bill.my_subscription.subscription.pic.url}}" alt="bill">
+					      </td>
+					      <td>{{pending_bill.month}}</td>
+					      <td>{{pending_bill.amount}}</td>
+					      <td>{{pending_bill.payable}}</td>
+					      <td>
+					      	<button type="button" class="btn btn-success">Pay</button>
+					      </td>
+					      <td>
+					      	<button type="button" class="btn btn-danger">Del</button>
+					      </td>
+					    </tr>
+				   {% endfor %}
 				  </tbody>
 				</table>
 
-				<!--
-				<div class="crops">
-					<div class="crop">
-						<div class="head">
-							<div class="text">
-								<h4>Maize</h4>
-								<p>A dry condition crop</p>
-							</div>
-							<div class="image">
-								<img src="./images/maize.jpg" alt="">
-							</div>
-							
-						</div>
-
-						<div class="timeline">
-							<div class="start">
-								<h5>Start Date</h5>
-								<p>10/05/2021</p>
-							</div>
-							<div class="end">
-								<h5>End Date(Approx)</h5>
-								<p>10/11/2021</p>
-							</div>
-						</div>
-						<div class="next">
-							<a href="">
-								<ion-icon name="arrow-forward-outline"></ion-icon>
-							</a>
-						</div>
-					</div>
-
-					<div class="crop">
-						<div class="head">
-							<div class="text">
-								<h4>Coffee</h4>
-								<p>A dry condition crop</p>
-							</div>
-							<div class="image">
-								<img src="./images/coffee.jpg" alt="">
-							</div>
-							
-						</div>
-
-						<div class="timeline">
-							<div class="start">
-								<h5>Start Date</h5>
-								<p>10/05/2021</p>
-							</div>
-							<div class="end">
-								<h5>End Date(Approx)</h5>
-								<p>10/11/2021</p>
-							</div>
-						</div>
-						<div class="next">
-							<a href="">
-								<ion-icon name="arrow-forward-outline"></ion-icon>
-							</a>
-						</div>
-					</div>
-
-				</div>  -->
+				
 			</div>
 
 			<div class="graph">
@@ -178,48 +103,63 @@
 			    </tr>
 			  </thead>
 			  <tbody>
-			    <tr>
-			      <th scope="row">1</th>
-			      <td>
-			      	<img src="{% static 'images/kplc.jpeg' %}" alt="bill">
-			      </td>
-			      <td>November</td>
-			      <td>1000</td>
-			      <td>1200</td>
-			      <td>
-			      	<button type="button" class="btn btn-success">Pay</button>
-			      </td>
-			     
-			    </tr>
-			    <tr>
-			      <th scope="row">2</th>
-			      <td>
-			      	<img src="{% static 'images/dstv.jpg' %}" alt="bill" >
-			      </td>
-			      <td>November</td>
-			      <td>700</td>
-			      <td>700</td>
-			      <td>
-			      	<button type="button" class="btn btn-success">Pay</button>
-			      </td>
-			     
-			    </tr>
-			    <tr>
-			      <th scope="row">3</th>
-			      <td>
-			      	<img src="{% static 'images/water.png' %}" alt="bill">
-			      </td>
-			      <td>November</td>
-			      <td>3250</td>
-			      <td>2000</td>
-			      <td>
-			      	<button type="button" class="btn btn-success">Pay</button>
-			      </td>
-			     
-			    </tr>
+
+			  	{% for upcoming_bill in upcoming_bills%}
+				    <tr>
+				      <th scope="row">1</th>
+				      <td>
+				      	<img src="{{upcoming_bill.my_subscription.subscription.pic.url}}" alt="bill">
+				      </td>
+				      <td>{{upcoming_bill.month}}</td>
+				      <td>{{upcoming_bill.amount}}</td>
+				      <td>{{upcoming_bill.payable}}</td>
+				      <td>
+				      	<button type="button" class="btn btn-success">Pay</button>
+				      </td>
+				     
+				    </tr>
+			    {% endfor %}
+			   
 			  </tbody>
 			</table>
 		</div>
+
+
+		<!-- Modal -->
+		<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		  <div class="modal-dialog  modal-dialog-centered">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h5 class="modal-title" id="exampleModalLabel">Add Subscription</h5>
+		        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+		      </div>
+		      <div class="modal-body">
+		        <form action="{% url 'main:register_subscription'%}" method="post">
+		        	{% csrf_token %}
+		        	<div>
+			        	<label for="exampleFormControlInput1" class="form-label">Subscription</label>
+			        	<select class="form-select form-select-sm" aria-label=".form-select-sm example" name="subscription">
+						  {% for subscription in subscriptions %}
+						  	<option value={{subscription.id}}>{{subscription.name}}</option>
+						  {% endfor %}
+						  
+						</select>
+					</div>
+
+					<div style="margin-top: 20px">
+						<label for="exampleFormControlInput1" class="form-label">Account/Meter No</label>
+			        	<input class="form-control form-control-sm" type="text" placeholder="e.g 6667-789-899" aria-label=".form-control-sm example" name="account">
+
+					</div>
+
+					<div align="center" style="margin-top: 20px">
+						<button type="submit" class="btn btn-primary" style="padding: 20px">Subscribe</button>
+					</div>
+		        </form>
+		      </div>
+		      
+		    </div>
+		  </div>
 {% endblock %}
 
 {% block scripts %}

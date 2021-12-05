@@ -209,11 +209,23 @@ body {
 }
 .task {
 	background: whitesmoke;
-	width: 100%;
+	width: 25%;
+	min-height: 150px;
 	padding: 5px 5px;
 	border-radius: 10px;
 	position: relative;
 	margin-right: 30px;
+}
+
+.task .add {
+	position: absolute;
+	top: 28%;
+	left: 35%;
+}
+
+.task .add ion-icon {
+	font-size: 60px;
+	color: green;
 }
 
 .title .task-title {
