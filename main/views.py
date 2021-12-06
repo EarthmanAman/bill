@@ -1,5 +1,5 @@
 from datetime import date
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from . models import Subscription, MySubscription, Bill
 
@@ -59,13 +59,68 @@ def register_subscription(request):
 
 	return redirect("main:index")
 
+def create_months_dict(bills):
+	months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+	l = {}
+	ls = []
+	months.reverse()
+	for month in months:
+		l[(2021, month)] = {"title": month, "bills":[]}
+
+	for bill in bills:
+		m = 12 - bill.for_date.month 
+		month = months[m]
+		if bill.credit - bill.debit <= 0:
+			l[(2021, month)]["bills"].append({"bill":bill, "paid": True})
+		else:
+			l[(2021, month)]["bills"].append({"bill":bill, "status":False})
+	for key in list(l.keys()):
+		ls.append(l[key])
+	return ls
 @login_required
 def invoices(request):
 	template_name = "invoices.html"
+	invoices_list = Bill.objects.all()
+	i = create_months_dict(invoices_list)
+	print(i)
+	query = request.GET.get("query")
+	if query:
+		i = list(filter(lambda bill: query.lower() in bill["title"].lower(), i))
 	context = {
-		"nbar":"invoices"
+		"nbar":"invoices",
+		"invoices":i,
+		"query": query,
 	}
 	return render(request, template_name, context)
+
+
+@login_required
+def invoice(request, bill_id):
+	template_name = "invoice.html"
+	months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+	bill = get_object_or_404(Bill, pk=bill_id)
+	paid = False
+	
+	if bill.credit <= bill.debit:
+		print("heree")
+		paid = True
+	print(paid)
+	bill_dict = {
+		"id": bill.id,
+		"bill":bill,
+		"month": months[bill.for_date.month - 1],
+		"balance": bill.credit,
+		"payable": bill.credit - bill.debit,
+		"amount": bill.debit,
+		"date": bill.for_date,
+	}
+	context = {
+		"nbar":"invoices",
+		"bill":bill_dict,
+		"paid":paid,
+	}
+	return render(request, template_name, context)
+
 
 @login_required
 def profile(request):
@@ -75,4 +130,13 @@ def profile(request):
 		"user": request.user,
 	}
 	return render(request, template_name, context)
+
+
+@login_required
+
+def delete_bill(request, bill_id):
+	bill = Bill.objects.get(pk=bill_id)
+	bill.delete()
+	return redirect("main:index")
+
 

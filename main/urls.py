@@ -6,6 +6,9 @@ from . views import (
 	invoices, 
 	profile,
 	register_subscription,
+
+	delete_bill,
+	invoice,
 )
 
 app_name = "main"
@@ -16,4 +19,7 @@ urlpatterns = [
     path('profile/', profile, name="profile"),
 
     path('register_subscription/', register_subscription, name="register_subscription"),
+
+    path('delete_bill/<int:bill_id>', delete_bill, name="delete_bill"),
+    path('invoice/<int:bill_id>', invoice, name="invoice"),
 ]

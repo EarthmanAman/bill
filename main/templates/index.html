@@ -72,7 +72,7 @@
 					      	<button type="button" class="btn btn-success">Pay</button>
 					      </td>
 					      <td>
-					      	<button type="button" class="btn btn-danger">Del</button>
+					      	<a href="{% url 'main:delete_bill' pending_bill.id %}" class="btn btn-danger">Del</a>
 					      </td>
 					    </tr>
 				   {% endfor %}

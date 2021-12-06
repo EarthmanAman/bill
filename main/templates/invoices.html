@@ -4,179 +4,77 @@
 	<div class="" style="margin-bottom: 30px; display: flex; justify-content: space-between;">
 		<h3 style="font-size: 25px; color: #272f07">MONTHLY INVOICES</h3>
 		<hr style="width: 40px; height: 2px">
-		<form class="d-flex">
-	        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+		<form class="d-flex" method="get" action="">
+			{% if query %}
+	        	<input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="query" value="{{query}}">
+	        {% else %}
+	        	<input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="query">
+	        {% endif %}
 	        <button class="btn btn-outline-success" type="submit">Search</button>
 	      </form>
 	</div>
 	
+	{% for invoice in invoices %}
+
 	<div class="third-row">
-		<h3>November</h3>
+		<h3>{{invoice.title}} - 2021</h3>
 		<table class="table table-striped">
 		  <thead>
 		    <tr>
 		    	<th scope="col">#</th>
 		      <th scope="col">Bill</th>
+		      <th scope="col">Name</th>
 		      <th scope="col">Date</th>
 		      <th scope="col">Amount</th>
-		      <th scope="col">Balance</th>
-		      <th scope="col">Print</th>
+		      <!-- <th scope="col">Balance</th> -->
+		      <th scope="col">View</th>
+		      <th scope="col">Status</th>
 		    </tr>
 		  </thead>
 		  <tbody>
-		    <tr>
-		      <th scope="row">1</th>
-		      <td>
-		      	<img src="{% static 'images/kplc.jpeg' %}" alt="bill">
-		      </td>
-		      <td>12/11/2021</td>
-		      <td>1000</td>
-		      <td>00</td>
-		      <td>
-		      	<button type="button" class="btn btn-success">Print</button>
-		      </td>
-		     
-		    </tr>
-		    <tr>
-		      <th scope="row">2</th>
-		      <td>
-		      	<img src="{% static 'images/dstv.jpg' %}" alt="bill" >
-		      </td>
-		      <td>12/11/2021</td>
-		      <td>1000</td>
-		      <td>00</td>
-		      <td>
-		      	<button type="button" class="btn btn-success">Print</button>
-		      </td>
-		    </tr>
-		    <tr>
-		      <th scope="row">3</th>
-		      <td>
-		      	<img src="{% static 'images/water.png' %}" alt="bill">
-		      </td>
-		      <td>12/11/2021</td>
-		      <td>1000</td>
-		      <td>00</td>
-		      <td>
-		      	<button type="button" class="btn btn-success">Print</button>
-		      </td>
-		     
-		    </tr>
+			{% if invoice.bills %}
+			  	{% for bill in invoice.bills %}
+			    <tr>
+			      <th scope="row">1</th>
+			      <td>
+			      	{% if bill.bill.my_subscription.subscription.pic %}
+			      		<img src="{{bill.bill.my_subscription.subscription.pic.url}}" alt="bill">
+			      
+			      	{% endif %}
+			      </td>
+			      <td>{{bill.bill.my_subscription.subscription.name}}</td>
+			      <td>{{bill.bill.modified_date}}</td>
+			      <td>{{bill.bill.credit}}</td>
+			      <!-- <td>00</td> -->
+			      <td>
+			      	<a href="{% url 'main:invoice' bill.bill.id%}" class="btn btn-primary">View</a>
+			      </td>
+
+			      <td>
+					{% if bill.paid%}
+			      	<button type="button" class="btn btn-success" disabled>Paid</button>
+			      	{% else %}
+			      	<button type="button" class="btn btn-danger" disabled>Not Paid</button>
+			      	{% endif %}
+			      </td>
+			     
+			    </tr>
+			    {% endfor %}
+			{% else %}
+				<tr>
+					<td colspan="7">
+						<div align="center" style="color: brown; font-weight: bold;">
+							No invoices this month
+						</div>
+						
+					</td>
+				</tr>
+			{% endif %}
 		  </tbody>
 		</table>
 	</div>
 
-	<div class="third-row">
-		<h3>October</h3>
-		<table class="table table-striped">
-		  <thead>
-		    <tr>
-		    	<th scope="col">#</th>
-		      <th scope="col">Bill</th>
-		      <th scope="col">Date</th>
-		      <th scope="col">Amount</th>
-		      <th scope="col">Balance</th>
-		      <th scope="col">Print</th>
-		    </tr>
-		  </thead>
-		  <tbody>
-		    <tr>
-		      <th scope="row">1</th>
-		      <td>
-		      	<img src="{% static 'images/kplc.jpeg' %}" alt="bill">
-		      </td>
-		      <td>12/11/2021</td>
-		      <td>1000</td>
-		      <td>00</td>
-		      <td>
-		      	<button type="button" class="btn btn-success">Print</button>
-		      </td>
-		     
-		    </tr>
-		    <tr>
-		      <th scope="row">2</th>
-		      <td>
-		      	<img src="{% static 'images/dstv.jpg' %}" alt="bill" >
-		      </td>
-		      <td>12/11/2021</td>
-		      <td>1000</td>
-		      <td>00</td>
-		      <td>
-		      	<button type="button" class="btn btn-success">Print</button>
-		      </td>
-		    </tr>
-		    <tr>
-		      <th scope="row">3</th>
-		      <td>
-		      	<img src="{% static 'images/water.png' %}" alt="bill">
-		      </td>
-		      <td>12/11/2021</td>
-		      <td>1000</td>
-		      <td>00</td>
-		      <td>
-		      	<button type="button" class="btn btn-success">Print</button>
-		      </td>
-		     
-		    </tr>
-		  </tbody>
-		</table>
-	</div>
-
-	<div class="third-row">
-		<h3>September</h3>
-		<table class="table table-striped">
-		  <thead>
-		    <tr>
-		    	<th scope="col">#</th>
-		      <th scope="col">Bill</th>
-		      <th scope="col">Date</th>
-		      <th scope="col">Amount</th>
-		      <th scope="col">Balance</th>
-		      <th scope="col">Print</th>
-		    </tr>
-		  </thead>
-		  <tbody>
-		    <tr>
-		      <th scope="row">1</th>
-		      <td>
-		      	<img src="{% static 'images/kplc.jpeg' %}" alt="bill">
-		      </td>
-		      <td>12/11/2021</td>
-		      <td>1000</td>
-		      <td>00</td>
-		      <td>
-		      	<button type="button" class="btn btn-success">Print</button>
-		      </td>
-		     
-		    </tr>
-		    <tr>
-		      <th scope="row">2</th>
-		      <td>
-		      	<img src="{% static 'images/dstv.jpg' %}" alt="bill" >
-		      </td>
-		      <td>12/11/2021</td>
-		      <td>1000</td>
-		      <td>00</td>
-		      <td>
-		      	<button type="button" class="btn btn-success">Print</button>
-		      </td>
-		    </tr>
-		    <tr>
-		      <th scope="row">3</th>
-		      <td>
-		      	<img src="{% static 'images/water.png' %}" alt="bill">
-		      </td>
-		      <td>12/11/2021</td>
-		      <td>1000</td>
-		      <td>00</td>
-		      <td>
-		      	<button type="button" class="btn btn-success">Print</button>
-		      </td>
-		     
-		    </tr>
-		  </tbody>
-		</table>
-	</div>
+	{% endfor %}
 
 {% endblock %}
 
