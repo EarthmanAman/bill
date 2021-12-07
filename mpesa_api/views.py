@@ -25,8 +25,9 @@ def index(request):
 def stk_push_callback(request):
 	data = request.body
 	# You can do whatever you want with the notification received from MPESA here.
+	print("in call back")
 	print(data)
-	return HttpResponse(data)
+	
 
 def lipa_na_mpesa_online(request):
 	access_token = MpesaAccessToken.validated_mpesa_access_token
