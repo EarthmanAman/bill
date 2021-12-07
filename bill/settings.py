@@ -146,13 +146,13 @@ MPESA_CONSUMER_SECRET = 'VHLOEC12ekGGlYmh'
 
 #Shortcode to use for transactions. For sandbox  use the Shortcode 1 provided on test credentials page
 
-MPESA_SHORTCODE = '174379'
+MPESA_SHORTCODE = '600995'
 
 # Shortcode to use for Lipa na MPESA Online (MPESA Express) transactions
 # This is only used on sandbox, do not set this variable in production
 # For sandbox use the Lipa na MPESA Online Shorcode provided on test credentials page
 
-MPESA_EXPRESS_SHORTCODE = '600992'
+MPESA_EXPRESS_SHORTCODE = '174379'
 
 # Type of shortcode
 # Possible values:
