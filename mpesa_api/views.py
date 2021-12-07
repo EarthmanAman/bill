@@ -18,6 +18,7 @@ def index(request):
 	account_reference = 'reference'
 	transaction_desc = 'Description'
 	callback_url = request.build_absolute_uri(reverse('mpesa_api:mpesa_stk_push_callback'))
+	print(callback_url)
 	response = cl.stk_push(phone_number, amount, account_reference, transaction_desc, callback_url)
 	return HttpResponse(response)
 
