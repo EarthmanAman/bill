@@ -22,5 +22,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include("accounts.urls", namespace="accounts")),
     path('', include("main.urls", namespace="main")),
-    path('mpesa_api/', include("mpesa_api.urls", namespace="mpesa_api")),
+    path('api/v1/', include("mpesa_api.urls", namespace="mpesa_api")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

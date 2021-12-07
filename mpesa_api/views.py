@@ -43,14 +43,18 @@ def getAccessToken(request):
 def register_urls(request):
 	access_token = MpesaAccessToken.validated_mpesa_access_token
 	api_url = "https://sandbox.safaricom.co.ke/mpesa/c2b/v1/registerurl"
-	headers = {"Authorization": "Bearer %s" % access_token}
-	options = {"ShortCode": LipanaMpesaPpassword.Test_c2b_shortcode,
+	headers = { 'Content-Type': 'application/json', "Authorization": "Bearer %s" % access_token}
+	payload = {"ShortCode": LipanaMpesaPpassword.Test_c2b_shortcode,
 	           "ResponseType": "Completed",
-	           "ConfirmationURL": "https://billmanagementproject.herokuapp.com/mpesa_api/c2b/confirmation",
-	           "ValidationURL": "https://billmanagementproject.herokuapp.com/mpesa_api/c2b/validation"}
-	response = requests.post(api_url, json=options, headers=headers)
-	return HttpResponse(response.text)
+	           "ConfirmationURL": "https://billmanagementproject.herokuapp.com/api/v1/c2b/confirmation",
+	           "ValidationURL": "hthttps://billmanagementproject.herokuapp.com/api/v1/c2b/validation",
+	           }
+	response = requests.request("POST", api_url, headers = headers, data = payload)
+	response = response.text.encode('utf8')
+	return HttpResponse(response)
 
+#"ConfirmationURL": "https://billmanagementproject.herokuapp.com/mpesa_api/c2b/confirmation",
+#"ValidationURL": "https://billmanagementproject.herokuapp.com/mpesa_api/c2b/validation"
 
 @csrf_exempt
 def call_back(request):
