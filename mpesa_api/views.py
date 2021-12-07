@@ -8,6 +8,25 @@ from . mpesa_credential import MpesaAccessToken, LipanaMpesaPpassword
 
 from .models import MpesaPayment
 
+from django_daraja.mpesa.core import MpesaClient
+
+def index(request):
+	cl = MpesaClient()
+	# Use a Safaricom phone number that you have access to, for you to be able to view the prompt.
+	phone_number = '0701467872'
+	amount = 1
+	account_reference = 'reference'
+	transaction_desc = 'Description'
+	callback_url = request.build_absolute_uri(reverse('mpesa_api:mpesa_stk_push_callback'))
+	response = cl.stk_push(phone_number, amount, account_reference, transaction_desc, callback_url)
+	return HttpResponse(response)
+
+def stk_push_callback(request):
+	data = request.body
+	# You can do whatever you want with the notification received from MPESA here.
+	print(data)
+	return HttpResponse(data)
+
 def lipa_na_mpesa_online(request):
 	access_token = MpesaAccessToken.validated_mpesa_access_token
 	api_url = "https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest"
