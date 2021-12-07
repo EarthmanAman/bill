@@ -10,12 +10,14 @@ from . views import (
 	delete_bill,
 	invoice,
 	subscription,
+	
 )
 
 app_name = "main"
 
 urlpatterns = [
     path('', index, name="index"),
+  
     path('invoices/', invoices, name="invoices"),
     path('profile/', profile, name="profile"),
 

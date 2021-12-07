@@ -40,6 +40,7 @@ INSTALLED_APPS = [
 
     "accounts",
     "main",
+    "mpesa_api",
 ]
 
 MIDDLEWARE = [
