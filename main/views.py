@@ -1,8 +1,12 @@
 from datetime import date
 from django.shortcuts import render, redirect, get_object_or_404
+from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from . models import Subscription, MySubscription, Bill
-
+from django.views.generic import View
+from django.template.loader import get_template
+from . utils import render_to_pdf #created in step 4
+from django.contrib import messages
 
 def get_pending_bills(request):
 	pendings = []
@@ -34,6 +38,21 @@ def get_upcoming_bills(request):
 
 	return upcoming
 
+def get_bills(bills_list):
+	bills = []
+	months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+	for bill in bills_list:
+		
+		bills.append({
+				"id": bill.id, 
+				"my_subscription": bill.my_subscription,
+				"month":months[bill.for_date.month - 1], 
+				"amount": bill.credit, 
+				"payable": bill.credit - bill.debit
+			})
+
+	return bills
+
 @login_required
 def index(request):
 	template_name = "index.html"
@@ -55,7 +74,10 @@ def register_subscription(request):
 		subscription = request.POST.get("subscription")
 		account = request.POST.get("account")
 		subscription = Subscription.objects.get(pk=int(subscription))
-		my_subscription = MySubscription.objects.create(user=request.user, subscription=subscription, account_no=account)
+		if subscription in [subs.subscription for subs in request.user.mysubscription_set.all()]:
+			messages.add_message(request, messages.WARNING, 'You already subscribed to this!')
+		else:
+			my_subscription = MySubscription.objects.create(user=request.user, subscription=subscription, account_no=account)
 
 	return redirect("main:index")
 
@@ -82,7 +104,7 @@ def invoices(request):
 	template_name = "invoices.html"
 	invoices_list = Bill.objects.all()
 	i = create_months_dict(invoices_list)
-	print(i)
+
 	query = request.GET.get("query")
 	if query:
 		i = list(filter(lambda bill: query.lower() in bill["title"].lower(), i))
@@ -102,9 +124,8 @@ def invoice(request, bill_id):
 	paid = False
 	
 	if bill.credit <= bill.debit:
-		print("heree")
 		paid = True
-	print(paid)
+	
 	bill_dict = {
 		"id": bill.id,
 		"bill":bill,
@@ -119,7 +140,22 @@ def invoice(request, bill_id):
 		"bill":bill_dict,
 		"paid":paid,
 	}
+
+	download = request.GET.get("download")
+	if download:
+		template = get_template("invoice_download.html")
+		html = template.render(context)
+		pdf = render_to_pdf('invoice_download.html', context)
+		if pdf:
+			response = HttpResponse(pdf, content_type='application/pdf')
+			filename = "Invoice_%s.pdf" %(str(bill.id))
+			#content = "inline; filename='%s'" %(filename)
+			content = "attachment; filename='%s'" %(filename)
+			response['Content-Disposition'] = content
+			return response
+
 	return render(request, template_name, context)
+
 
 
 @login_required
@@ -140,3 +176,14 @@ def delete_bill(request, bill_id):
 	return redirect("main:index")
 
 
+@login_required
+def subscription(request, subscription_id):
+	template_name = "other_subscriptions.html"
+	subscription = get_object_or_404(MySubscription, pk=subscription_id)
+	bills = get_bills(subscription.bill_set.all())
+	context = {
+		"nbar":"home",
+		"subscription": subscription,
+		"bills":bills,
+	}
+	return render(request, template_name, context)

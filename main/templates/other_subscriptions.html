@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+{% load static %}
+{% block custom_css %}
+	<link rel="stylesheet" type="text/css" href="{% static 'css/subscription.css' %}">
+{% endblock %}
+{% block content %}
+	<div class="" style="margin-bottom: 30px" align="center">
+		<h3 style="font-size: 25px; color: #272f07; text-transform: uppercase;">{{subscription.subscription.name}}</h3>
+		<hr style="width: 40px; height: 2px">
+	</div>
+	
+	<div class="profile-main">
+		<div class="info-section">
+			
+
+			<div class="recent-transactions">
+				<br>
+				<h3>Recent Transactions</h3>	
+
+				<ul class="list-group">
+				  <li class="list-group-item d-flex justify-content-between align-items-center">
+				    KPLC
+				    <span class="badge bg-primary rounded-pill">Kshs. 14OO</span>
+				  </li>
+				  <li class="list-group-item d-flex justify-content-between align-items-center">
+				    Water Bill
+				    <span class="badge bg-primary rounded-pill">Kshs. 800</span>
+				  </li>
+				  <li class="list-group-item d-flex justify-content-between align-items-center">
+				    DSTV
+				    <span class="badge bg-primary rounded-pill">Kshs. 1000</span>
+				  </li>
+				</ul>
+			</div>
+
+			<div class="table">
+				<h3>Bills</h3>
+				<table class="table table-striped">
+				  <thead>
+				    <tr>
+				    	<th scope="col">#</th>
+				      <th scope="col">Bill</th>
+				      <th scope="col">Month</th>
+				      <th scope="col">Amount</th>
+				      <th scope="col">Paybale</th>
+				      <th scope="col">Pay</th>
+				      <th scope="col">Delete</th>
+				    </tr>
+				  </thead>
+				  <tbody>
+
+				  	{% for pending_bill in bills%}
+					    <tr>
+					      <th scope="row">1</th>
+					      <td>
+					      	<img src="{{pending_bill.my_subscription.subscription.pic.url}}" alt="bill">
+					      </td>
+					      <td>{{pending_bill.month}}</td>
+					      <td>{{pending_bill.amount}}</td>
+					      <td>{{pending_bill.payable}}</td>
+					      <td>
+					      	<button type="button" class="btn btn-success">Pay</button>
+					      </td>
+					      <td>
+					      	<a href="{% url 'main:delete_bill' pending_bill.id %}" class="btn btn-danger">Del</a>
+					      </td>
+					    </tr>
+				   {% endfor %}
+				  </tbody>
+				</table>
+			</div>
+		</div>
+		<div class="update-section">
+
+			<div class="form">
+				<h3>Subscription Information</h3>
+					<div class="row">
+						<div class="col-lg-6">
+							<div class="mb-3">
+								 <label for="exampleFormControlInput1" class="form-label">Start Date</label> 
+								<br>
+							  <button class="btn btn-outline-secondary" style="padding:5px 20px !important;width: 100%; text-align: left;">{{subscription.created_date}}</button>
+							</div>
+						</div>
+
+						<div class="col-lg-6">
+							<div class="mb-3">
+								 <label for="exampleFormControlInput1" class="form-label">Account No</label>
+							 <br>
+							  <button class="btn btn-outline-secondary" style="padding:5px 20px !important; width: 100%;text-align: left;">{{subscription.account_no}}</button>
+							</div>
+						</div>
+
+					</div>
+
+					<div class="mb-3">
+						 <label for="exampleFormControlInput1" class="form-label">Current Units/Token</label>
+					  <button class="btn btn-outline-secondary" style="padding:5px 20px !important; width: 100%;text-align: left;">{{subscription.bill_set.last.units}}</button>
+					</div>
+					
+					 <label for="exampleFormControlInput1" class="form-label">Summary Usage</label>
+					<div class="input-group input-group-sm mb-3">
+
+						<span class="input-group-text" id="inputGroup-sizing-sm" style="min-width: 100px">December</span>
+						<input type="number" class="form-control" aria-label="Sizing example input" 
+						placeholder="Phone number" 
+						aria-describedby="inputGroup-sizing-sm" name="phone_number" value="55.5" disabled style="background-color: white;">
+
+						
+					</div>
+					<div class="input-group input-group-sm mb-3">
+
+						<span class="input-group-text" id="inputGroup-sizing-sm" style="min-width: 100px">November</span>
+						<input type="number" class="form-control" aria-label="Sizing example input" 
+						placeholder="Phone number" 
+						aria-describedby="inputGroup-sizing-sm" name="phone_number" value="55.5" disabled style="background-color: white;">
+
+						
+					</div>
+					<div id="emailHelp" class="form-text"><em> For more information contact your subscriber. </em></div> <br>
+					
+					<div class="bottom">
+						<button type="submit" class="btn btn-primary">Update</button>
+					</div>
+					
+			</div>
+
+			
+			
+		</div>
+	</div>
+{% endblock %}
+
+{% block scripts %}
+	
+{% endblock %}

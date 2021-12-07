@@ -23,11 +23,19 @@
 			</div>
 			
 		</div>
-
+		{% if messages %}
+			<ul class="messages">
+			    {% for message in messages %}
+			    <li{% if message.tags %} class="{{ message.tags }} list-group-item list-group-item-action list-group-item-warning"{% endif %}>{{ message }}</li>
+			    {% endfor %}
+			</ul>
+			{% endif %}
 		<div id="tasks_id" class="tasks owl-carousel owl-theme">
 			{% for my_subscription in my_subscriptions %}
 			<div class="task">
-				<img src="{{my_subscription.subscription.pic.url}}" alt="">
+				<a href="{% url 'main:subscription' my_subscription.id%}">
+					<img src="{{my_subscription.subscription.pic.url}}" alt="">
+				</a>
 			</div>
 			{% endfor %}
 
