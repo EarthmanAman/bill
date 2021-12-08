@@ -17,7 +17,7 @@ app_name = "mpesa_api"
 
 urlpatterns = [
     path('access_token', getAccessToken, name="access_token"),
-    path('online/lipa', index, name='lipa_na_mpesa'),
+    path('online/lipa/<int:bill_id>', index, name='lipa_na_mpesa'),
     path('daraja/stk-push', stk_push_callback, name='mpesa_stk_push_callback'),
     # register, confirmation, validation and callback urls
     path('c2b/register', register_urls, name="register_mpesa_validation"),

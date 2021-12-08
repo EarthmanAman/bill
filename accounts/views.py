@@ -8,6 +8,8 @@ from django.contrib.auth import (
 from django.contrib import messages
 
 from . models import User
+
+
 def registration(request):
 	template_name = "registration.html"
 	error = False
@@ -19,17 +21,22 @@ def registration(request):
 		password = request.POST.get('password')
 		confirm_password = request.POST.get('confirm_password')
 
+		# Check if there is a user with the given email
 		user_in = User.objects.filter(email=email)
 		if user_in.exists():
 			messages.add_message(request, messages.ERROR, 'User with this email already exists. Please login')
 			return render(request, template_name)
 
+		# Confirm password
 		if password != confirm_password:
 			messages.add_message(request, messages.ERROR, 'Password Do not Match')
 			error = True
+
+		# Check phone number
 		if len(str(phone_number)) != 9:
 			messages.add_message(request, messages.ERROR, 'Phone number is invalid')
 			error = True
+
 		if not error:
 			user = User(
 				email=email, 
@@ -46,7 +53,11 @@ def registration(request):
 				login(request, userIn)
 				next_endpoint = request.GET.get("next", '')
 				return redirect("/")
+
+				
 	return render(request, template_name)
+
+
 
 def login_user(request):
 	template_name = "login.html"
@@ -58,8 +69,12 @@ def login_user(request):
 		userIn = authenticate(email=email, password=password)
 		if userIn:
 			login(request, userIn)
+			if request.user.is_superuser == True:
+				return redirect("admin:index")
 			next_endpoint = request.GET.get("next", '')
 			return redirect("/")
+		else:
+			messages.add_message(request, messages.ERROR, 'The user with given crediatials does not exists.')
 	return render(request, template_name)
 
 
@@ -67,6 +82,14 @@ def login_user(request):
 def logout_user(request):
 	logout(request)
 	return redirect("accounts:login")
+
+
+
+
+
+
+
+
 
 @login_required
 def update(request, user_id):

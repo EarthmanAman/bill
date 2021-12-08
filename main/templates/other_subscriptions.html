@@ -4,11 +4,26 @@
 	<link rel="stylesheet" type="text/css" href="{% static 'css/subscription.css' %}">
 {% endblock %}
 {% block content %}
-	<div class="" style="margin-bottom: 30px" align="center">
-		<h3 style="font-size: 25px; color: #272f07; text-transform: uppercase;">{{subscription.subscription.name}}</h3>
-		<hr style="width: 40px; height: 2px">
+		<div align="center">
+			<h3 style="font-size: 25px; color: #272f07; text-transform: uppercase;">SUBSCRIPTION</h3>
+			<hr>
+			
+		</div>
+	<div class="" style="margin-bottom: 30px; display: flex; justify-content: space-between;" align="center">
+		<div>
+			<h3 style="font-size: 25px; color: #272f07; text-transform: uppercase;">{{subscription.subscription.name}}</h3>
+			
+		</div>
+
+		<a href="{% url 'main:delete_subscription' subscription.id%}" class="btn btn-danger" style="margin-left: 60px; padding-bottom: 20px !important">Delete</a>
 	</div>
-	
+	{% if messages %}
+			<ul class="messages">
+			    {% for message in messages %}
+			    <li{% if message.tags %} class="{{ message.tags }} list-group-item list-group-item-action list-group-item-info"{% endif %}>{{ message }}</li>
+			    {% endfor %}
+			</ul>
+			{% endif %}
 	<div class="profile-main">
 		<div class="info-section">
 			
@@ -18,18 +33,12 @@
 				<h3>Recent Transactions</h3>	
 
 				<ul class="list-group">
+					{% for tran in trans %}
 				  <li class="list-group-item d-flex justify-content-between align-items-center">
-				    KPLC
-				    <span class="badge bg-primary rounded-pill">Kshs. 14OO</span>
+				    {{tran.my_subscription.subscription.name}}
+				    <span class="badge bg-primary rounded-pill">Kshs. {{tran.amount}}</span>
 				  </li>
-				  <li class="list-group-item d-flex justify-content-between align-items-center">
-				    Water Bill
-				    <span class="badge bg-primary rounded-pill">Kshs. 800</span>
-				  </li>
-				  <li class="list-group-item d-flex justify-content-between align-items-center">
-				    DSTV
-				    <span class="badge bg-primary rounded-pill">Kshs. 1000</span>
-				  </li>
+				  {% endfor %}
 				</ul>
 			</div>
 
@@ -44,7 +53,7 @@
 				      <th scope="col">Amount</th>
 				      <th scope="col">Paybale</th>
 				      <th scope="col">Pay</th>
-				      <th scope="col">Delete</th>
+				      <th scope="col">Status</th>
 				    </tr>
 				  </thead>
 				  <tbody>
@@ -59,10 +68,21 @@
 					      <td>{{pending_bill.amount}}</td>
 					      <td>{{pending_bill.payable}}</td>
 					      <td>
-					      	<button type="button" class="btn btn-success">Pay</button>
+					      	{% if pending_bill.paid %}
+					      	<button type="button" class="btn btn-success" disabled="">Pay</button>
+					      	{% else %}
+					      	<form action="{% url 'mpesa_api:lipa_na_mpesa' pending_bill.id %}" method="get">
+					      		<input type="hidden" name="next" value="subs">
+					      		<button type="submit" class="btn btn-success">Pay</button>
+					      	</form>
+					      	{% endif %}
 					      </td>
 					      <td>
-					      	<a href="{% url 'main:delete_bill' pending_bill.id %}" class="btn btn-danger">Del</a>
+					      	{% if pending_bill.paid %}
+					      	<button class="btn btn-success" disabled="">Paid</button>
+					      	{% else %}
+					      	<button class="btn btn-danger" disabled="">Unpaid</button>
+					      	{% endif %}
 					      </td>
 					    </tr>
 				   {% endfor %}
@@ -120,7 +140,7 @@
 					<div id="emailHelp" class="form-text"><em> For more information contact your subscriber. </em></div> <br>
 					
 					<div class="bottom">
-						<button type="submit" class="btn btn-primary">Update</button>
+						<!-- <button type="submit" class="btn btn-primary">Update</button> -->
 					</div>
 					
 			</div>

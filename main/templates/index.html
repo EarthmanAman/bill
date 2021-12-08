@@ -26,7 +26,7 @@
 		{% if messages %}
 			<ul class="messages">
 			    {% for message in messages %}
-			    <li{% if message.tags %} class="{{ message.tags }} list-group-item list-group-item-action list-group-item-warning"{% endif %}>{{ message }}</li>
+			    <li{% if message.tags %} class="{{ message.tags }} list-group-item list-group-item-action list-group-item-info"{% endif %}>{{ message }}</li>
 			    {% endfor %}
 			</ul>
 			{% endif %}
@@ -77,7 +77,7 @@
 					      <td>{{pending_bill.amount}}</td>
 					      <td>{{pending_bill.payable}}</td>
 					      <td>
-					      	<a href="" class="btn btn-success">Pay</a>
+					      	<a href="{% url 'mpesa_api:lipa_na_mpesa' pending_bill.id %}" class="btn btn-success">Pay</a>
 					      </td>
 					      <td>
 					      	<a href="{% url 'main:delete_bill' pending_bill.id %}" class="btn btn-danger">Del</a>
@@ -122,7 +122,7 @@
 				      <td>{{upcoming_bill.amount}}</td>
 				      <td>{{upcoming_bill.payable}}</td>
 				      <td>
-				      	<button type="button" class="btn btn-success">Pay</button>
+				      	<a href="{% url 'mpesa_api:lipa_na_mpesa' upcoming_bill.id %}" class="btn btn-success">Pay</a>
 				      </td>
 				     
 				    </tr>

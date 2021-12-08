@@ -1,4 +1,5 @@
-from datetime import date
+import csv
+from datetime import date, datetime
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
@@ -7,7 +8,7 @@ from django.views.generic import View
 from django.template.loader import get_template
 from . utils import render_to_pdf #created in step 4
 from django.contrib import messages
-
+from mpesa_api.models import MpesaPayment
 def get_pending_bills(request):
 	pendings = []
 	months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
@@ -48,16 +49,19 @@ def get_bills(bills_list):
 				"my_subscription": bill.my_subscription,
 				"month":months[bill.for_date.month - 1], 
 				"amount": bill.credit, 
-				"payable": bill.credit - bill.debit
+				"payable": bill.credit - bill.debit,
+				"paid": True if bill.credit - bill.debit == 0  else False,
 			})
 
 	return bills
 
 @login_required
 def index(request):
+	if request.user.is_superuser == True:
+		return redirect("admin:index")
 	template_name = "index.html"
 	subscriptions = Subscription.objects.all()
-	my_subscriptions = MySubscription.objects.all()
+	my_subscriptions = MySubscription.objects.filter(user=request.user)
 	pending_bills = get_pending_bills(request)
 	upcoming_bills = get_upcoming_bills(request)
 	context = {
@@ -69,6 +73,32 @@ def index(request):
 	}
 	return render(request, template_name, context)
 
+def simulate(subscription, account):
+	filename = "main/kplc_bill.csv"
+	if subscription.subscription.name == "WATER":
+		filename = "main/water_bill.csv"
+	elif subscription.subscription.name == "DSTV":
+		filename = "main/dstv_bill.csv"
+
+	with open(filename, 'r') as file:
+		reader = csv.reader(file)
+		headers = next(reader)
+
+		for contents in reader:
+			if contents[0] == str(account):
+				m = contents[1][0:2]
+				d = contents[1][3:5]
+				y = contents[1][6:]
+				print(m)
+				print(d)
+				print(y)
+				date = datetime.strptime(y + "-" + m + "-" + d, "%Y-%m-%d").date()
+				
+				bill = Bill.objects.create(my_subscription=subscription, for_date=date, credit=float(contents[2]), debit=float(contents[3]))
+				if float(contents[3]) <= float(contents[3]):
+					mpesa = MpesaPayment.objects.create(my_subscription=subscription, amount=float(contents[2]))
+
+@login_required
 def register_subscription(request):
 	if request.method == "POST":
 		subscription = request.POST.get("subscription")
@@ -78,6 +108,7 @@ def register_subscription(request):
 			messages.add_message(request, messages.WARNING, 'You already subscribed to this!')
 		else:
 			my_subscription = MySubscription.objects.create(user=request.user, subscription=subscription, account_no=account)
+			simulate(my_subscription, account)
 
 	return redirect("main:index")
 
@@ -101,6 +132,8 @@ def create_months_dict(bills):
 	return ls
 @login_required
 def invoices(request):
+	if request.user.is_superuser == True:
+		return redirect("admin:index")
 	template_name = "invoices.html"
 	invoices_list = Bill.objects.all()
 	i = create_months_dict(invoices_list)
@@ -118,6 +151,8 @@ def invoices(request):
 
 @login_required
 def invoice(request, bill_id):
+	if request.user.is_superuser == True:
+		return redirect("admin:index")
 	template_name = "invoice.html"
 	months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
 	bill = get_object_or_404(Bill, pk=bill_id)
@@ -160,10 +195,14 @@ def invoice(request, bill_id):
 
 @login_required
 def profile(request):
+	if request.user.is_superuser == True:
+		return redirect("admin:index")
 	template_name = "profile.html"
+	trans = MpesaPayment.objects.filter(my_subscription__user=request.user).order_by("-pk")
 	context = {
 		"nbar":"profile",
 		"user": request.user,
+		"trans":trans,
 	}
 	return render(request, template_name, context)
 
@@ -178,12 +217,22 @@ def delete_bill(request, bill_id):
 
 @login_required
 def subscription(request, subscription_id):
+	if request.user.is_superuser == True:
+		return redirect("admin:index")
 	template_name = "other_subscriptions.html"
 	subscription = get_object_or_404(MySubscription, pk=subscription_id)
-	bills = get_bills(subscription.bill_set.all())
+	trans = MpesaPayment.objects.filter(my_subscription=subscription).order_by("-pk")
+	bills = get_bills(subscription.bill_set.all().order_by("pk"))
 	context = {
 		"nbar":"home",
 		"subscription": subscription,
 		"bills":bills,
+		"trans":trans[:4],
 	}
 	return render(request, template_name, context)
+
+def delete_subscription(request, subscription_id):
+	sub = MySubscription.objects.get(pk=subscription_id)
+	sub.delete()
+	messages.add_message(request, messages.SUCCESS, 'Deleted Successfully')
+	return redirect("main:index")

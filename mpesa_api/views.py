@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import requests
@@ -7,20 +7,34 @@ import json
 from . mpesa_credential import MpesaAccessToken, LipanaMpesaPpassword
 from django.urls import reverse
 from .models import MpesaPayment
-
+from main.models import Bill
 from django_daraja.mpesa.core import MpesaClient
+from django.contrib import messages
 
-def index(request):
+def index(request, bill_id):
 	cl = MpesaClient()
 	# Use a Safaricom phone number that you have access to, for you to be able to view the prompt.
-	phone_number = '0701467872'
+	bill = get_object_or_404(Bill, pk=bill_id)
+	phone_number = '0' + str(bill.my_subscription.user.phone_number)
 	amount = 1
 	account_reference = 'reference'
 	transaction_desc = 'Description'
 	callback_url = request.build_absolute_uri(reverse('mpesa_api:mpesa_stk_push_callback'))
-	print(callback_url)
+	
+	
+	bill.debit = bill.credit
+	bill.save()
+	subscription = bill.my_subscription
+
+	trns = MpesaPayment.objects.create(my_subscription=subscription, amount=bill.credit)
+	messages.add_message(request, messages.SUCCESS, 'Please enter your pin in the mpesa menu which will appear.')
 	response = cl.stk_push(phone_number, amount, account_reference, transaction_desc, callback_url)
-	return HttpResponse(response)
+	nex = request.GET.get('next', "/")
+	if nex == "subs":
+		return redirect("main:subscription", subscription_id=subscription.id)
+	elif nex == "invoice":
+		return redirect("main:invoice", bill_id=bill_id)
+	return redirect(nex)
 
 def stk_push_callback(request):
 	data = request.body

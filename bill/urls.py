@@ -18,6 +18,10 @@ from django.urls import path, include
 from django.conf.urls.static import static
 from django.conf import settings
 
+admin.site.site_header = "Bill Management and Tracking Admin Site"
+admin.site.site_title = "Admin"
+admin.site.index_title = "Welcome to Admin Panel"
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include("accounts.urls", namespace="accounts")),

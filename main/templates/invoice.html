@@ -6,6 +6,13 @@
 {% block content %}
 
 <div class="page-content container">
+    {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }} list-group-item list-group-item-action list-group-item-info"{% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
     <div class="page-header text-blue-d2">
         <h1 class="page-title text-secondary-d1">
             Invoice
@@ -21,14 +28,14 @@
                     <i class="mr-1 fa fa-print text-primary-m1 text-120 w-2"></i>
                     Print
                 </a> -->
-                <!--
+                
                 <form action="" method="get">
                 	<input type="hidden" value="download" name="download">
 	                <button class="btn bg-white btn-light mx-1px text-95" type="submit" data-title="PDF">
 	                    <i class="mr-1 fa fa-file-pdf-o text-danger-m1 text-120 w-2"></i>
 	                    Export
 	                </button>
-                </form> -->
+                </form> 
             </div>
         </div>
     </div>
@@ -151,8 +158,10 @@
                         {% if paid %}
                         	<a href="#" class="btn btn-success btn-bold px-4 float-right mt-3 mt-lg-0" disabled>Paid</a>
                         {% else %}
-                        	
-                        	<a href="#" class="btn btn-info btn-bold px-4 float-right mt-3 mt-lg-0">Pay Now</a>
+                        	   <form action="{% url 'mpesa_api:lipa_na_mpesa' bill.id %}" method="get">
+                                <input type="hidden" name="next" value="invoice">
+                                <a type="submit" class="btn btn-info btn-bold px-4 float-right mt-3 mt-lg-0">Pay Now</a>
+                            </form>
                         {% endif %}
                     </div>
                 </div>
