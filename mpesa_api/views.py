@@ -21,6 +21,9 @@ def index(request, bill_id):
 	transaction_desc = 'Description'
 	callback_url = request.build_absolute_uri(reverse('mpesa_api:mpesa_stk_push_callback'))
 	
+	response = cl.stk_push(phone_number, amount, account_reference, transaction_desc, callback_url)
+
+	
 	
 	bill.debit = bill.credit
 	bill.save()
@@ -28,7 +31,8 @@ def index(request, bill_id):
 
 	trns = MpesaPayment.objects.create(my_subscription=subscription, amount=bill.credit)
 	messages.add_message(request, messages.SUCCESS, 'Please enter your pin in the mpesa menu which will appear.')
-	response = cl.stk_push(phone_number, amount, account_reference, transaction_desc, callback_url)
+
+
 	nex = request.GET.get('next', "/")
 	if nex == "subs":
 		return redirect("main:subscription", subscription_id=subscription.id)

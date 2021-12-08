@@ -34,7 +34,11 @@
 			{% for my_subscription in my_subscriptions %}
 			<div class="task">
 				<a href="{% url 'main:subscription' my_subscription.id%}">
+					{% if my_subscription.subscription.pic %}
 					<img src="{{my_subscription.subscription.pic.url}}" alt="">
+					{% else %}
+						<img src="{% static 'images/no_image.jpg' %}" alt="" width="50">
+					{% endif %}
 				</a>
 			</div>
 			{% endfor %}
