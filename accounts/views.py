@@ -7,7 +7,7 @@ from django.contrib.auth import (
     )
 from django.contrib import messages
 
-from . models import User
+from . models import User, Message
 
 
 def registration(request):
@@ -31,7 +31,27 @@ def registration(request):
 		if password != confirm_password:
 			messages.add_message(request, messages.ERROR, 'Password Do not Match')
 			error = True
+		else:
+			SpecialSym=['$','@','#', "!", "$", "%", "^", "&", "*", ".", "(", ")"]
+			return_val = True
+			if len(password) < 6:
+				messages.add_message(request, messages.ERROR, 'The length of password should be at least 6 char long')
+				return_val=False
+			if not any(char.isdigit() for char in password):
+				messages.add_message(request, messages.ERROR, 'The password should have at least one numeral')
+				return_val=False
+			if not any(char.isupper() for char in password):
+				messages.add_message(request, messages.ERROR, 'The password should have at least one uppercase letter')
+				return_val=False
+			if not any(char.islower() for char in password):
+				messages.add_message(request, messages.ERROR, 'The password should have at least one lowercase letter')
+				return_val=False
+			if not any(char in SpecialSym for char in password):
+				messages.add_message(request, messages.ERROR, 'The password should have at least one special character')
+				return_val = False
 
+			if return_val == False:
+				return render(request, template_name)
 		# Check phone number
 		if len(str(phone_number)) != 9:
 			messages.add_message(request, messages.ERROR, 'Phone number is invalid')
@@ -70,7 +90,7 @@ def login_user(request):
 		if userIn:
 			login(request, userIn)
 			if request.user.is_superuser == True:
-				return redirect("admin:index")
+				return redirect("accounts:admin_index")
 			next_endpoint = request.GET.get("next", '')
 			return redirect("/")
 		else:
@@ -82,13 +102,6 @@ def login_user(request):
 def logout_user(request):
 	logout(request)
 	return redirect("accounts:login")
-
-
-
-
-
-
-
 
 
 @login_required
@@ -138,3 +151,36 @@ def update_password(request):
 		else:
 			messages.add_message(request, messages.ERROR, 'Old Password is wrong!')
 			return redirect("main:profile")
+
+@login_required
+def create_message(request):
+	if request.method == "POST":
+		subject = request.POST.get("subject")
+		message = request.POST.get("message")
+
+		if message != None:
+			message = Message.objects.create(user=request.user, subject=subject, message=message)
+	messages.add_message(request, messages.SUCCESS, 'Message sent successful')
+	return redirect("main:index") 
+
+@login_required
+def admin_index(request):
+	template_name = "./admin_index.html"
+	if request.user.is_superuser:
+		context = {
+			"nbar": "stats"
+		}
+		return render(request, template_name, context)
+	else:
+		redirect("main:index")
+
+@login_required
+def admin_messages(request):
+	template_name = "./admin_messages.html"
+	if request.user.is_superuser:
+		context = {
+			"nbar": "messages"
+		}
+		return render(request, template_name, context)
+	else:
+		redirect("main:index")

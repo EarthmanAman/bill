@@ -9,6 +9,9 @@ body {
 	background: #ffffff;
 }
 
+a {
+	text-decoration: none;
+}
 .navbar {
 	
 	margin-left: 20px !important;

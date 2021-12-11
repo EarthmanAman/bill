@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.forms import TextInput, Textarea
 
-from . models import User
+from . models import User, Message
 
 
 class UserAdminConfig(UserAdmin):
@@ -29,3 +29,4 @@ class UserAdminConfig(UserAdmin):
 		),
 	)
 admin.site.register(User, UserAdminConfig)
+admin.site.register(Message)

@@ -40,65 +40,32 @@
 		      <img src="{% static 'images/reg.svg' %}" alt="" width="50" class="d-inline-block align-text-top">
 		      BILL PAYMENT AND TRACKING SYSTEM
 		    </a>
-			<button class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal1">Contact Admin</button>
+		
 		    <a href="{% url 'main:profile'%}" style="text-transform: uppercase; text-decoration: none; margin-right: 40px">{{request.user.first_name}} {{request.user.last_name}} <span><img src="{% static 'images/avatar.png'%}" width="30"></span></a>
 		  </div>
 		</nav>
 	</div>
 	<div class="navigation">
 		<ul>
-			<li class="list {% if nbar == 'home' %}active{% endif %}">
+			<li class="list {% if nbar == 'stats' %}active{% endif %}">
 				<b></b>
 				<b></b>
-				<a href="{% url 'main:index'%}">
+				<a href="{% url 'accounts:admin_index'%}">
 					<span class="icon">
-						<ion-icon name="home-outline"></ion-icon>
+						<ion-icon name="stats-chart-outline"></ion-icon>
 					</span>
-					<span class="title">Home</span>
+					<span class="title">Statistics</span>
 				</a>
 			</li>
 
-			<li class="list {% if nbar == 'invoices' %}active{% endif %}">
+			<li class="list {% if nbar == 'messages' %}active{% endif %}">
 				<b></b>
 				<b></b>
-				<a href="{% url 'main:invoices'%}">
+				<a href="{% url 'accounts:admin_messages'%}">
 					<span class="icon">
-						<ion-icon name="receipt-outline"></ion-icon>
+						<ion-icon name="mail-outline"></ion-icon>
 					</span>
-					<span class="title">Invoices</span>
-				</a>
-			</li>
-			<!--
-			<li class="list">
-				<b></b>
-				<b></b>
-				<a href="#">
-					<span class="icon">
-						<ion-icon name="bar-chart-outline"></ion-icon>
-					</span>
-					<span class="title">Summary</span>
-				</a>
-			</li> -->
-		<!--
-			<li class="list">
-				<b></b>
-				<b></b>
-				<a href="#">
-					<span class="icon">
-						<ion-icon name="person-outline"></ion-icon>
-					</span>
-					<span class="title">Profile</span>
-				</a>
-			</li> -->
-			
-			<li class="list  {% if nbar == 'profile' %}active{% endif %}">
-				<b></b>
-				<b></b>
-				<a href="{% url 'main:profile'%}">
-					<span class="icon">
-						<ion-icon name="person-outline"></ion-icon>
-					</span>
-					<span class="title">Profile</span>
+					<span class="title">Messages</span>
 				</a>
 			</li>
 			
