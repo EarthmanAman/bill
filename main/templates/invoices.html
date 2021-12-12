@@ -35,7 +35,7 @@
 			{% if invoice.bills %}
 			  	{% for bill in invoice.bills %}
 			    <tr>
-			      <th scope="row">1</th>
+			      <th scope="row">{{bill.no}}</th>
 			      <td>
 			      	{% if bill.bill.my_subscription.subscription.pic %}
 			      		<img src="{{bill.bill.my_subscription.subscription.pic.url}}" alt="bill">

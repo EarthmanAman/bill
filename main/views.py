@@ -124,13 +124,13 @@ def create_months_dict(bills):
 	for month in months:
 		l[(2021, month)] = {"title": month, "bills":[]}
 
-	for bill in bills:
+	for idx, bill in enumerate(bills):
 		m = 12 - bill.for_date.month 
 		month = months[m]
 		if bill.credit - bill.debit <= 0:
-			l[(2021, month)]["bills"].append({"bill":bill, "paid": True})
+			l[(2021, month)]["bills"].append({"bill":bill, "paid": True, "no":len(l[(2021, month)]["bills"]) + 1})
 		else:
-			l[(2021, month)]["bills"].append({"bill":bill, "status":False})
+			l[(2021, month)]["bills"].append({"bill":bill, "status":False, "no":len(l[(2021, month)]["bills"]) + 1})
 	for key in list(l.keys()):
 		ls.append(l[key])
 	return ls
