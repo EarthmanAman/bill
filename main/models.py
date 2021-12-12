@@ -16,6 +16,20 @@ class Subscription(models.Model):
 
 	def __str__(self):
 		return self.name
+class Package(models.Model):
+	subscription 	= models.ForeignKey(Subscription, on_delete=models.CASCADE)
+	name 			= models.CharField(max_length=50)
+
+	def __str__(self):
+		return self.name
+		
+class Channel(models.Model):
+	package 	= models.ForeignKey(Package, on_delete=models.CASCADE)
+	channel_no	= models.IntegerField()
+	name 		= models.CharField(max_length=100)
+
+	def __str__(self):
+		return self.name
 
 class MySubscription(BaseModel):
 	user 			= models.ForeignKey(User, on_delete=models.CASCADE)
@@ -30,7 +44,7 @@ class Bill(BaseModel):
 	for_date			= models.DateField(blank=True, null=True)
 	credit 				= models.FloatField()
 	debit 				= models.FloatField()
-	units 				= models.FloatField(default=0.0)
+	units 				= models.CharField(max_length=50, default="0.0")
 
 	def __str__(self):
 		return str(self.for_date) + " : " + self.my_subscription.__str__() + "  => (" + str(self.credit) + " , " + str(self.debit) + ")"

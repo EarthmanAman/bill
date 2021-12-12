@@ -113,30 +113,44 @@
 
 					</div>
 
+					
+					
+					{% if channel %}
+						<div class="mb-3">
+							 <label for="exampleFormControlInput1" class="form-label">Package</label>
+						  <button class="btn btn-outline-secondary" style="padding:5px 20px !important; width: 100%;text-align: left; text-transform: uppercase;">{{units.first.package.name}}</button>
+						</div>
+						<label for="exampleFormControlInput1" class="form-label">Channels</label>
+						{% for unit in units %}
+						<div class="input-group input-group-sm mb-3">
+
+							<span class="input-group-text" id="inputGroup-sizing-sm" style="min-width: 100px">{{unit.channel_no}}</span>
+							<input type="text" class="form-control" aria-label="Sizing example input" 
+							placeholder="Channel name" 
+							aria-describedby="inputGroup-sizing-sm" value="{{unit.name}}" disabled style="background-color: white;">
+
+							
+						</div>
+						{% endfor %}
+					{% else %}
 					<div class="mb-3">
 						 <label for="exampleFormControlInput1" class="form-label">Current Units/Token</label>
 					  <button class="btn btn-outline-secondary" style="padding:5px 20px !important; width: 100%;text-align: left;">{{subscription.bill_set.last.units}}</button>
 					</div>
-					
-					 <label for="exampleFormControlInput1" class="form-label">Summary Usage</label>
-					<div class="input-group input-group-sm mb-3">
+					 <label for="exampleFormControlInput1" class="form-label">Summary Usage units/tokens</label>
+						{% for unit in units %}
+						<div class="input-group input-group-sm mb-3">
 
-						<span class="input-group-text" id="inputGroup-sizing-sm" style="min-width: 100px">December</span>
-						<input type="number" class="form-control" aria-label="Sizing example input" 
-						placeholder="Phone number" 
-						aria-describedby="inputGroup-sizing-sm" name="phone_number" value="55.5" disabled style="background-color: white;">
+							<span class="input-group-text" id="inputGroup-sizing-sm" style="min-width: 100px">{{unit.month}}</span>
+							<input type="number" class="form-control" aria-label="Sizing example input" 
+							placeholder="Units" 
+							aria-describedby="inputGroup-sizing-sm" name="phone_number" value="{{unit.units}}" disabled style="background-color: white;">
 
-						
-					</div>
-					<div class="input-group input-group-sm mb-3">
+							
+						</div>
+						{% endfor %}
+					{% endif %}
 
-						<span class="input-group-text" id="inputGroup-sizing-sm" style="min-width: 100px">November</span>
-						<input type="number" class="form-control" aria-label="Sizing example input" 
-						placeholder="Phone number" 
-						aria-describedby="inputGroup-sizing-sm" name="phone_number" value="55.5" disabled style="background-color: white;">
-
-						
-					</div>
 					<div id="emailHelp" class="form-text"><em> For more information contact your subscriber. </em></div> <br>
 					
 					<div class="bottom">

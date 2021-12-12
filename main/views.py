@@ -3,7 +3,7 @@ from datetime import date, datetime
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
-from . models import Subscription, MySubscription, Bill
+from . models import Subscription, MySubscription, Bill, Package, Channel
 from django.views.generic import View
 from django.template.loader import get_template
 from . utils import render_to_pdf #created in step 4
@@ -92,13 +92,9 @@ def simulate(subscription, account):
 				m = contents[1][0:2]
 				d = contents[1][3:5]
 				y = contents[1][6:]
-				print("in simulation found")
-				print(m)
-				print(d)
-				print(y)
 				date = datetime.strptime(y + "-" + m + "-" + d, "%Y-%m-%d").date()
 				
-				bill = Bill.objects.create(my_subscription=subscription, for_date=date, credit=float(contents[2]), debit=float(contents[3]))
+				bill = Bill.objects.create(my_subscription=subscription, for_date=date, credit=float(contents[2]), debit=float(contents[3]), units=contents[4])
 				if float(contents[3]) <= float(contents[3]):
 					mpesa = MpesaPayment.objects.create(my_subscription=subscription, amount=float(contents[2]))
 
@@ -219,6 +215,20 @@ def delete_bill(request, bill_id):
 	return redirect("main:index")
 
 
+def get_unit(subscription):
+	months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+	packages = subscription.subscription.package_set.all()
+	if len(packages) > 0:
+		package = Bill.objects.filter(my_subscription=subscription)[0]
+		package = Package.objects.filter(name=package.units)[0]
+		channels = package.channel_set.all()
+		return True, channels
+
+	units = []
+	for bill in subscription.bill_set.all():
+		units.append({"month":months[bill.for_date.month-1], "units":bill.units})
+	return False, units
+
 @login_required
 def subscription(request, subscription_id):
 	if request.user.is_superuser == True:
@@ -227,11 +237,14 @@ def subscription(request, subscription_id):
 	subscription = get_object_or_404(MySubscription, pk=subscription_id)
 	trans = MpesaPayment.objects.filter(my_subscription=subscription).order_by("-pk")
 	bills = get_bills(subscription.bill_set.all().order_by("pk"))
+	units = get_unit(subscription)
 	context = {
 		"nbar":"home",
 		"subscription": subscription,
 		"bills":bills,
 		"trans":trans[:4],
+		"channel": units[0],
+		"units":units[1],
 	}
 	return render(request, template_name, context)
 
