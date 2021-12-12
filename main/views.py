@@ -75,9 +75,9 @@ def index(request):
 
 def simulate(subscription, account):
 	filename = "main/kplc_bill.csv"
-	if subscription.subscription.name == "WATER":
+	if subscription.subscription.name.upper() == "WATER":
 		filename = "main/water_bill.csv"
-	elif subscription.subscription.name == "DSTV":
+	elif subscription.subscription.name.upper() == "DSTV":
 		filename = "main/dstv_bill.csv"
 
 	with open(filename, 'r') as file:
@@ -85,10 +85,14 @@ def simulate(subscription, account):
 		headers = next(reader)
 
 		for contents in reader:
+			print(account)
+			print(contents[0])
+			print("*"*50)
 			if contents[0] == str(account):
 				m = contents[1][0:2]
 				d = contents[1][3:5]
 				y = contents[1][6:]
+				print("in simulation found")
 				print(m)
 				print(d)
 				print(y)
