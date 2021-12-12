@@ -6,9 +6,11 @@ from django.contrib.auth import (
     logout,
     )
 from django.contrib import messages
+from django.db.models import Sum, Count
 
 from . models import User, Message
-
+from main.models import Subscription
+from mpesa_api.models import MpesaPayment
 
 def registration(request):
 	template_name = "registration.html"
@@ -163,12 +165,32 @@ def create_message(request):
 	messages.add_message(request, messages.SUCCESS, 'Message sent successful')
 	return redirect("main:index") 
 
+def subscription_total():
+	months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+	subscriptions = []
+	for subscription in Subscription.objects.all():
+		subscriptions.append({"name": subscription.name, "months":[], "transactions":0})
+		mpesa = MpesaPayment.objects.filter(my_subscription__subscription=subscription)
+		months_total = mpesa.filter(created_at__year='2021').values_list('created_at__month').annotate(total_item=Sum('amount'), total_count=Count('id'))
+		for idx, month in enumerate(months_total):
+			subscriptions[-1]["months"].append({
+				"month":months[month[0]-1], 
+				"amount":month[1], 
+				"transactions":month[2], 
+				"no":idx+1,
+				"revenue": float(month[1]) * 0.05,
+			})
+			
+	return subscriptions
+
 @login_required
 def admin_index(request):
 	template_name = "./admin_index.html"
+	subscriptions = subscription_total()
 	if request.user.is_superuser:
 		context = {
-			"nbar": "stats"
+			"nbar": "stats",
+			"subscriptions": subscriptions,
 		}
 		return render(request, template_name, context)
 	else:
@@ -177,9 +199,20 @@ def admin_index(request):
 @login_required
 def admin_messages(request):
 	template_name = "./admin_messages.html"
+	messages = Message.objects.all().order_by("-pk")
+	message_id = request.GET.get("message_id")
+	message = None
+
+	if message_id:
+		message = messages.get(pk=int(message_id))
+		message.read = True
+		message.save()
+
 	if request.user.is_superuser:
 		context = {
-			"nbar": "messages"
+			"nbar": "messages",
+			"messages": messages,
+			"message": message,
 		}
 		return render(request, template_name, context)
 	else:

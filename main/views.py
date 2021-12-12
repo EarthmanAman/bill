@@ -236,3 +236,4 @@ def delete_subscription(request, subscription_id):
 	sub.delete()
 	messages.add_message(request, messages.SUCCESS, 'Deleted Successfully')
 	return redirect("main:index")
+

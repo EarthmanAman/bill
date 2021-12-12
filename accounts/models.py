@@ -50,6 +50,8 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 
 class Message(models.Model):
+	created_date = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+	modified_date = models.DateTimeField(auto_now=True, blank=True, null=True)
 	user 	= models.ForeignKey(User, on_delete=models.CASCADE)
 	subject	= models.CharField(max_length=200, null=True)
 	message = models.TextField()

@@ -25,3 +25,7 @@ label {
 	color: #272f07;
 	font-weight: bold;
 }
+
+.table {
+	margin-right: 50px !important;
+}

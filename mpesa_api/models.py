@@ -38,4 +38,4 @@ class MpesaPayment(BaseModel):
 	amount = models.DecimalField(max_digits=10, decimal_places=2)
 
 	def __str__(self):
-		return self.amount
+		return str(self.amount)

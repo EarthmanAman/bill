@@ -1,2 +1,98 @@
-{% extends "admin_base.html"%}
+{% extends "admin_base.html" %}
 {% load static %}
+{% block custom_css %}
+	<link rel="stylesheet" type="text/css" href="{% static 'css/profile.css' %}">
+{% endblock %}
+{% block content %}
+	<div class="" style="margin-bottom: 30px">
+		<h3 style="font-size: 25px; color: #272f07">MY PROFILE</h3>
+		<hr style="width: 40px; height: 2px">
+	</div>
+	
+	<div class="profile-main">
+		<div class="info-section">
+			{% for message in messages %}
+				{% if message.read %}
+					<div class="card w-80 bg-light">
+					  <div class="card-body">
+					    <h5 class="card-title">{{message.created_date}}</h5>
+					    <p class="card-text">{{message.subject}}</p>
+					    <form method="get" action="">
+					    	<input type="hidden" name="message_id" value="{{message.id}}">
+					    	<button type="submit" class="btn btn-primary">View</button>
+					    </form>
+					    
+					  </div>
+					</div>
+				{% else %}
+					<div class="card w-80 bg-success">
+					  <div class="card-body">
+					    <h5 class="card-title">{{message.created_date}}</h5>
+					    <p class="card-text">{{message.subject}}</p>
+					    <form method="get" action="">
+					    	<input type="hidden" name="message_id" value="{{message.id}}">
+					    	<button type="submit" class="btn btn-primary">View</button>
+					    </form>
+					  </div>
+					</div>
+				{% endif %}
+			{% endfor %}
+
+		</div>
+		<div class="update-section">
+
+			<div class="form">
+				<h3>Sender Information</h3>
+					<div class="row">
+						<div class="col-lg-6">
+							<div class="mb-3">
+								 <label for="exampleFormControlInput1" class="form-label">First Name</label>
+							  <input class="form-control form-control-sm" type="text" placeholder="First Name" aria-label=".form-control-sm example" name="first_name" value="{{message.user.first_name}}" readonly="">
+							</div>
+						</div>
+
+						<div class="col-lg-6">
+							<div class="mb-3">
+								 <label for="exampleFormControlInput1" class="form-label">Last Name</label>
+							  <input class="form-control form-control-sm" type="text" placeholder="Last Name" aria-label=".form-control-sm example" name="last_name" value="{{message.user.last_name}}" readonly="">
+							</div>
+						</div>
+
+					</div>
+
+					<div class="mb-3">
+						 <label for="exampleFormControlInput1" class="form-label">Email address</label>
+					  <input class="form-control form-control-sm" type="email" placeholder="Email Address" aria-label=".form-control-sm example" name="email" value="{{messge.user.email}}" readonly="">
+					</div>
+					
+					 <label for="exampleFormControlInput1" class="form-label">Phone Number</label>
+					<div class="input-group input-group-sm mb-3">
+
+						<span class="input-group-text" id="inputGroup-sizing-sm">+254</span>
+						<input type="number" class="form-control" aria-label="Sizing example input" 
+						placeholder="Phone number" 
+						aria-describedby="inputGroup-sizing-sm" name="phone_number" value="{{message.user.phone_number}}">
+
+						
+					</div>
+
+					<div class="mb-3">
+						 <label for="exampleFormControlInput1" class="form-label">Subject</label>
+					  <input class="form-control form-control-sm" type="text" aria-label=".form-control-sm example" name="email" value="{{message.subject}}">
+					</div>
+
+					<div class="mb-3">
+						 <label for="exampleFormControlInput1" class="form-label">Message</label>
+					  <textarea rows="10" class="form-control form-control-sm" type="text" aria-label=".form-control-sm example">{{message.message}}</textarea>
+					</div>
+					
+					
+			</div>
+			
+		</div>
+	</div>
+{% endblock %}
+
+{% block scripts %}
+	
+{% endblock %}
