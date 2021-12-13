@@ -1,7 +1,8 @@
 import csv
 from datetime import date, datetime
+from django.db.models import Sum
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponse
+from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from . models import Subscription, MySubscription, Bill, Package, Channel
 from django.views.generic import View
@@ -9,6 +10,8 @@ from django.template.loader import get_template
 from . utils import render_to_pdf #created in step 4
 from django.contrib import messages
 from mpesa_api.models import MpesaPayment
+
+
 def get_pending_bills(request):
 	pendings = []
 	months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
@@ -71,6 +74,8 @@ def index(request):
 		"pending_bills": pending_bills,
 		"upcoming_bills": upcoming_bills,
 	}
+
+	
 	return render(request, template_name, context)
 
 def simulate(subscription, account):
@@ -85,9 +90,7 @@ def simulate(subscription, account):
 		headers = next(reader)
 
 		for contents in reader:
-			print(account)
-			print(contents[0])
-			print("*"*50)
+			
 			if contents[0] == str(account):
 				m = contents[1][0:2]
 				d = contents[1][3:5]
@@ -96,7 +99,7 @@ def simulate(subscription, account):
 				
 				bill = Bill.objects.create(my_subscription=subscription, for_date=date, credit=float(contents[2]), debit=float(contents[3]), units=contents[4])
 				if float(contents[3]) <= float(contents[3]):
-					mpesa = MpesaPayment.objects.create(my_subscription=subscription, amount=float(contents[2]))
+					mpesa = MpesaPayment.objects.create(my_subscription=subscription, amount=float(contents[2]), created_at=date)
 
 @login_required
 def register_subscription(request):
@@ -254,3 +257,25 @@ def delete_subscription(request, subscription_id):
 	messages.add_message(request, messages.SUCCESS, 'Deleted Successfully')
 	return redirect("main:index")
 
+
+def chart(request):
+	labels = ["Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+	colors = ["red", "green","blue", "pink", "brown"]
+	datas = []
+	for idx, my_subscription in enumerate(MySubscription.objects.filter(user=request.user)):
+		months_total = my_subscription.mpesapayment_set.filter(created_at__year='2021').values_list('created_at__month').annotate(total_item=Sum('amount'))
+		data = []
+		l = len(months_total) - 6
+		if l < 0:
+			for i in range(6-len(months_total)):
+				data.append(0)
+
+		for month in months_total:
+			data.append(month[1])
+
+		datas.append({"data":data, "borderColor":colors[idx], "fill": False, "label":my_subscription.subscription.name})
+
+	return JsonResponse(data={
+        'labels': labels,
+        'data': datas,
+    })

@@ -11,6 +11,7 @@ from . views import (
 	invoice,
 	subscription,
 	delete_subscription,
+	chart,
 )
 
 app_name = "main"
@@ -28,4 +29,6 @@ urlpatterns = [
     path('subscription/<int:subscription_id>', subscription, name="subscription"),
 
     path('delete_subscription/<int:subscription_id>', delete_subscription, name="delete_subscription"),
+
+    path('chart', chart, name="chart"),
 ]

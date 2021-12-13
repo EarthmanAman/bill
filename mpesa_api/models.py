@@ -2,7 +2,7 @@ from django.db import models
 from main.models import MySubscription
 
 class BaseModel(models.Model):
-	created_at = models.DateTimeField(auto_now_add=True)
+	created_at = models.DateTimeField()
 	updated_at = models.DateTimeField(auto_now=True)
 
 	class Meta:
