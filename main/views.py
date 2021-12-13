@@ -138,7 +138,7 @@ def invoices(request):
 	if request.user.is_superuser == True:
 		return redirect("admin:index")
 	template_name = "invoices.html"
-	invoices_list = Bill.objects.all()
+	invoices_list = Bill.objects.filter(my_subscription__user=request.user)
 	i = create_months_dict(invoices_list)
 
 	query = request.GET.get("query")
