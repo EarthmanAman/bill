@@ -7,6 +7,8 @@ from django.contrib.auth import (
     )
 from django.contrib import messages
 from django.db.models import Sum, Count
+from django.conf import settings
+from django.core.mail import send_mail
 
 from . models import User, Message
 from main.models import Subscription
@@ -171,10 +173,12 @@ def subscription_total():
 	for subscription in Subscription.objects.all():
 		subscriptions.append({"name": subscription.name, "months":[], "transactions":0})
 		mpesa = MpesaPayment.objects.filter(my_subscription__subscription=subscription)
+
 		months_total = mpesa.filter(created_at__year='2021').values_list('created_at__month').annotate(total_item=Sum('amount'), total_count=Count('id'))
 		for idx, month in enumerate(months_total):
 			subscriptions[-1]["months"].append({
-				"month":months[month[0]-1], 
+				"month":months[month[0]-1],
+				"month_no":month[0]-1, 
 				"amount":month[1], 
 				"transactions":month[2], 
 				"no":idx+1,
@@ -183,13 +187,49 @@ def subscription_total():
 			
 	return subscriptions
 
+def month_total(month):
+	mpesa = MpesaPayment.objects.filter(created_at__month=month)
+	trans = mpesa.values_list('my_subscription__subscription__name').annotate( total_amount=Sum('amount'))
+	subscriptions = []
+	total = 0
+	for idx, tran in enumerate(trans):
+		subscriptions.append({"name":tran[0], "amount":tran[1], "commission":round(float(tran[1])*0.05, 2), "index":idx+1})
+		total += round(float(tran[1])*0.05, 2)
+
+	return subscriptions, total
+
+def create_m():
+	months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+	m = []
+	for n in months:
+		m.append({"name":n, "index":months.index(n)+1})
+	return m
+
 @login_required
 def admin_index(request):
 	template_name = "./admin_index.html"
 	subscriptions = subscription_total()
+	month_total(11)
 	if request.user.is_superuser:
+
+		month  = request.GET.get("month", None)
+		total = 0
+		if month:
+			month = int(month)
+			months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+			subscriptions, total = month_total(month)
+			print(month)
+			context = {
+				"month":months[month-1],
+				"subscriptions": subscriptions,
+				"total": total,
+				"nbar": "stats"
+			}
+
+			return render(request, "./report.html", context)
 		context = {
 			"nbar": "stats",
+			"months": create_m(),
 			"subscriptions": subscriptions,
 		}
 		return render(request, template_name, context)
@@ -217,3 +257,84 @@ def admin_messages(request):
 		return render(request, template_name, context)
 	else:
 		redirect("main:index")
+
+def forget_password(request):
+	if request.method == "POST":
+		email = request.POST.get("email")
+		user = User.objects.filter(email=email)
+		if user.exists():
+			user = user.last()
+			subject = 'FORGOT PASSWORD'
+			password = gen_pass()
+			msg = f'Hi {user.first_name} {user.last_name}, \n\nYou are receiving this email because you requested a password reset.\n\nUse below password then make sure you go and update it for security reasons. \n\n\nPassword:  {password}'
+			email_from = settings.EMAIL_HOST_USER
+			recipient_list = [user.email, ]
+			send_mail( subject, msg, email_from, recipient_list)
+			user.set_password(password)
+			user.save()
+		messages.add_message(request, messages.SUCCESS, 'Check your email')
+
+	return render(request, "./forgot_password.html")
+
+
+
+import random
+import array
+ 
+def gen_pass():
+	# maximum length of password needed
+	# this can be changed to suit your password length
+	MAX_LEN = 8
+	  
+	# declare arrays of the character that we need in out password
+	# Represented as chars to enable easy string concatenation
+	DIGITS = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']  
+	LOCASE_CHARACTERS = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 
+	                     'i', 'j', 'k', 'm', 'n', 'o', 'p', 'q',
+	                     'r', 's', 't', 'u', 'v', 'w', 'x', 'y',
+	                     'z']
+	  
+	UPCASE_CHARACTERS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 
+	                     'I', 'J', 'K', 'M', 'N', 'O', 'p', 'Q',
+	                     'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y',
+	                     'Z']
+	  
+	SYMBOLS = ['@', '#', '$', '%', '=', ':', '?', '.', '/', '|', '~', '>', 
+	           '*', '(', ')', '<']
+	  
+	# combines all the character arrays above to form one array
+	COMBINED_LIST = DIGITS + UPCASE_CHARACTERS + LOCASE_CHARACTERS + SYMBOLS
+	  
+	# randomly select at least one character from each character set above
+	rand_digit = random.choice(DIGITS)
+	rand_upper = random.choice(UPCASE_CHARACTERS)
+	rand_lower = random.choice(LOCASE_CHARACTERS)
+	rand_symbol = random.choice(SYMBOLS)
+	  
+	# combine the character randomly selected above
+	# at this stage, the password contains only 4 characters but 
+	# we want a 12-character password
+	temp_pass = rand_digit + rand_upper + rand_lower + rand_symbol
+	  
+	  
+	# now that we are sure we have at least one character from each
+	# set of characters, we fill the rest of
+	# the password length by selecting randomly from the combined 
+	# list of character above.
+	for x in range(MAX_LEN - 4):
+		temp_pass = temp_pass + random.choice(COMBINED_LIST)
+
+		# convert temporary password into array and shuffle to 
+		# prevent it from having a consistent pattern
+		# where the beginning of the password is predictable
+		temp_pass_list = array.array('u', temp_pass)
+		random.shuffle(temp_pass_list)
+	  
+	# traverse the temporary password array and append the chars
+	# to form the password
+	password = ""
+	for x in temp_pass_list:
+		password = password + x
+	          
+	# print out password
+	return password

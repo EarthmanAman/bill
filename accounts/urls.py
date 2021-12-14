@@ -10,6 +10,7 @@ from . views import (
 	create_message,
 	admin_index,
 	admin_messages,
+	forget_password,
 )
 
 app_name = "accounts"
@@ -23,4 +24,5 @@ urlpatterns = [
     path('create_message', create_message, name="create_message"),
     path('admin_index', admin_index, name="admin_index"),
     path('admin_messages', admin_messages, name="admin_messages"),
+    path('forget_password', forget_password, name="forget_password"),
 ]
