@@ -71,10 +71,9 @@
 					      	{% if pending_bill.paid %}
 					      	<button type="button" class="btn btn-success" disabled="">Pay</button>
 					      	{% else %}
-					      	<form action="{% url 'mpesa_api:lipa_na_mpesa' pending_bill.id %}" method="get">
-					      		<input type="hidden" name="next" value="subs">
-					      		<button type="submit" class="btn btn-success">Pay</button>
-					      	</form>
+					      	
+					      		<a href="{% url 'main:invoice' pending_bill.id %}" class="btn btn-success">Pay</a>
+					      	
 					      	{% endif %}
 					      </td>
 					      <td>

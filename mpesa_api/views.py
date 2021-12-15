@@ -16,15 +16,15 @@ import csv
 
 def index(request, subscription_id):
 	# Use a Safaricom phone number that you have access to, for you to be able to view the prompt.
-	sub = get_object_or_404(MySubscription, pk=bill_id)
+	sub = get_object_or_404(MySubscription, pk=subscription_id)
 	transaction = request.POST.get("transaction")
-	with open(filename, 'r') as file:
+	with open("./mpesa_api/transactions.csv", 'r') as file:
 		reader = csv.reader(file)
 
 		for contents in reader:
 			if contents[0] == transaction:
 				amount = float(contents[1])
-				trns = MpesaPayment.objects.create(my_subscription=subscription, amount=bill.credit, created_at=timezone.now())
+				trns = MpesaPayment.objects.create(my_subscription=sub, amount=amount, created_at=timezone.now())
 				for bill in sub.bill_set.all():
 					if bill.credit > bill.debit:
 						payable = bill.credit - bill.debit
@@ -37,7 +37,7 @@ def index(request, subscription_id):
 							amount = 0
 							bill.save()
 				if amount > 0:
-					s = sub.bill_set.last()
+					s = sub.bill_set.first()
 					s.debit = s.debit + amount
 					s.save()
 
@@ -47,9 +47,9 @@ def index(request, subscription_id):
 
 	nex = request.POST.get('next', "/")
 	if nex == "subs":
-		return redirect("main:subscription", subscription_id=subscription.id)
+		return redirect("main:subscription", subscription_id=subscription_id)
 	elif nex == "invoice":
-		return redirect("main:invoice", bill_id=bill_id)
+		return redirect("main:subscription", subscription_id=subscription_id)
 	return redirect(nex)
 
 def stk_push_callback(request):
