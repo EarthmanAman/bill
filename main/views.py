@@ -61,7 +61,7 @@ def get_bills(bills_list):
 @login_required
 def index(request):
 	if request.user.is_superuser == True:
-		return redirect("admin:index")
+		return redirect("accounts:admin_index")
 	template_name = "index.html"
 	subscriptions = Subscription.objects.all()
 	my_subscriptions = MySubscription.objects.filter(user=request.user)
