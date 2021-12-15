@@ -185,7 +185,13 @@
               </div>
               <div class="modal-body">
                 <ul>
-                    <li>Go to mpesa</li>
+                    <li>Go to mpesa menu.</li>
+                    <li>Select Lipa na Mpesa</li>
+                    <li>Go to Pay bill</li>
+                    <li>Business no: {{bill.bill.my_subscription.subscription.paybill}}</li>
+                    <li>Account No: {{bill.bill.my_subscription.account_no}}</li>
+                    <li>Enter amount</li>
+                    <li>Enter pin</li>
                 </ul>
                 <form action="{% url 'mpesa_api:lipa_na_mpesa' bill.bill.my_subscription.id %}" method="post">
                     {% csrf_token %}
@@ -198,7 +204,7 @@
                     </div>
 
                     <div align="center" style="margin-top: 20px">
-                        <button type="submit" class="btn btn-primary" style="padding: 20px">Paid</button>
+                        <button type="submit" class="btn btn-primary" style="padding: 20px">Pay</button>
                     </div>
                 </form>
               </div>
