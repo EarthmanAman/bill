@@ -28,9 +28,9 @@ def index(request, subscription_id):
 				for bill in sub.bill_set.all():
 					if bill.credit > bill.debit:
 						payable = bill.credit - bill.debit
-						if amount > payable:
+						if amount >= payable:
 							bill.debit = bill.credit
-							bill.save
+							bill.save()
 							amount = amount -payable
 						else:
 							bill.debit = bill.debit + amount

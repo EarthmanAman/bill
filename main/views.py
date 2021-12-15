@@ -53,7 +53,7 @@ def get_bills(bills_list):
 				"month":months[bill.for_date.month - 1], 
 				"amount": bill.credit, 
 				"payable": bill.credit - bill.debit,
-				"paid": True if bill.credit - bill.debit == 0  else False,
+				"paid": True if bill.credit - bill.debit <= 0  else False,
 			})
 
 	return bills
