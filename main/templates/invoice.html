@@ -163,10 +163,9 @@
                         {% if paid %}
                         	<a href="#" class="btn btn-success btn-bold px-4 float-right mt-3 mt-lg-0" disabled>Paid</a>
                         {% else %}
-                        	   <form action="{% url 'mpesa_api:lipa_na_mpesa' bill.id %}" method="get">
-                                <input type="hidden" name="next" value="invoice">
-                                <a type="submit" class="btn btn-info btn-bold px-4 float-right mt-3 mt-lg-0">Pay Now</a>
-                            </form>
+                        	   
+                                <button type="submit" class="btn btn-info btn-bold px-4 float-right mt-3 mt-lg-0"  data-bs-toggle="modal" data-bs-target="#payment">Pay Now</button>
+                            
                         {% endif %}
                     </div>
                 </div>
@@ -174,5 +173,38 @@
         </div>
     </div>
 </div>
+
+
+<!-- Modal -->
+        <div class="modal fade" id="payment" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog  modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Payment Subscription</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <ul>
+                    <li>Go to mpesa</li>
+                </ul>
+                <form action="{% url 'mpesa_api:lipa_na_mpesa' bill.bill.my_subscription.id %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="next" value="invoice">
+
+                    <div style="margin-top: 20px">
+                        <label for="exampleFormControlInput1" class="form-label">Transaction Reference No.</label>
+                        <input class="form-control form-control-sm" type="text" placeholder="e.g PQ34FGDH4" aria-label=".form-control-sm example" name="transaction">
+
+                    </div>
+
+                    <div align="center" style="margin-top: 20px">
+                        <button type="submit" class="btn btn-primary" style="padding: 20px">Paid</button>
+                    </div>
+                </form>
+              </div>
+              
+            </div>
+          </div>
+        </div>
 
 {% endblock %}

@@ -45,7 +45,7 @@ def index(request, subscription_id):
 				messages.add_message(request, messages.SUCCESS, 'Payment was successful')
 
 
-	nex = request.GET.get('next', "/")
+	nex = request.POST.get('next', "/")
 	if nex == "subs":
 		return redirect("main:subscription", subscription_id=subscription.id)
 	elif nex == "invoice":

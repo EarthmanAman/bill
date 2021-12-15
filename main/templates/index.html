@@ -80,7 +80,7 @@
 					      <td>{{pending_bill.amount}}</td>
 					      <td>{{pending_bill.payable}}</td>
 					      <td>
-					      	<a href="{% url 'mpesa_api:lipa_na_mpesa' pending_bill.id %}" class="btn btn-success">Pay</a>
+					      	<a href="{% url 'main:invoice' pending_bill.id %}" class="btn btn-success">Pay</a>
 					      </td>
 				
 					    </tr>
@@ -170,6 +170,9 @@
 		    </div>
 		  </div>
 		</div>
+
+
+		
 {% endblock %}
 
 {% block scripts %}
