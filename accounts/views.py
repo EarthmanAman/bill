@@ -5,6 +5,7 @@ from django.contrib.auth import (
     login,
     logout,
     )
+from django.utils import timezone
 from django.contrib import messages
 from django.db.models import Sum, Count
 from django.conf import settings
@@ -187,8 +188,8 @@ def subscription_total():
 			
 	return subscriptions
 
-def month_total(month):
-	mpesa = MpesaPayment.objects.filter(created_at__month=month)
+def month_total(start, last):
+	mpesa = MpesaPayment.objects.filter(created_at__gte=start).filter(created_at__lte=last)
 	trans = mpesa.values_list('my_subscription__subscription__name').annotate( total_amount=Sum('amount'))
 	subscriptions = []
 	total = 0
@@ -210,18 +211,21 @@ def create_m():
 def admin_index(request):
 	template_name = "./admin_index.html"
 	subscriptions = subscription_total()
-	month_total(11)
+	
 	if request.user.is_superuser:
 
 		month  = request.GET.get("month", None)
+		first  = request.GET.get("start", None)
+		last  = request.GET.get("last", None)
 		total = 0
-		if month:
-			month = int(month)
+		if first and last:
+			print("in heree")
 			months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
-			subscriptions, total = month_total(month)
+			subscriptions, total = month_total(first, last)
 			
 			context = {
-				"month":months[month-1],
+				"start":first,
+				"last": last,
 				"subscriptions": subscriptions,
 				"total": total,
 				"nbar": "stats"

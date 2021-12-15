@@ -8,6 +8,34 @@
 		<h3 style="font-size: 25px; color: #272f07">COMPANIES STATISTICS</h3>
 		<hr style="width: 40px; height: 2px">
 	</div>
+
+	<div>
+		<form action="" method="get">
+			<h5 style="font-weight: bold;">Search Reports</h5>
+			<hr style="width: 20px">
+			<div class="row">
+				<div class="col-lg-5">
+				<div class="mb-3">
+					<label for="">Start Date</label>
+				  <input class="form-control form-control-sm" type="date" placeholder="Start date" aria-label=".form-control-sm example" name="start" required="">
+				</div>
+				</div>
+
+				<div class="col-lg-5">
+					<div class="mb-3">
+						<label for="">End Date</label>
+				  <input class="form-control form-control-sm" type="date" placeholder="last date" aria-label=".form-control-sm example" name="last" required="">
+				</div>
+				</div>
+
+				<div class="col-lg-2">
+					<button type="submit" class="btn btn-primary" style="margin-top: 28px">Search</button>
+				</div>
+			</div>
+			
+		</form>
+	</div>
+	<!--
 	<div style="display: flex; justify-content: space-between;">
 			{% for month in months%}
 				<form action="" method="get">
@@ -16,6 +44,7 @@
 				</form>
 			{% endfor %}
 		</div>
+	-->
 	<div class="profile-main">
 		
 		<div class="info-section">

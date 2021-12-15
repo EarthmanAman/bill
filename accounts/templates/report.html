@@ -18,14 +18,35 @@
                         </div>
                     </div>
                 </div>
-                <!-- .row -->
 
+                <div class="row" style="margin-top: 30px; margin-bottom: 20px" align="center">
+                    <div class="col-sm-6">
+                        <div>
+                            <span class="text-sm text-grey-m2 align-middle">From:</span>
+                            <span class="text-600 text-110 text-blue align-middle">{{start}}</span>
+                        </div>
+                        
+                    </div>
+                    <div class="col-sm-6">
+                        <div>
+                            <span class="text-sm text-grey-m2 align-middle">To:</span>
+                            <span class="text-600 text-110 text-blue align-middle">{{last}}</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- .row -->
+                {% if subscriptions %}
+                {% else %}
+                    <div class="alert alert-warning" role="alert">
+                      No report for this range of dates!
+                    </div>
+                {% endif %}
                 <hr class="row brc-default-l1 mx-n1 mb-4" />
 
 
                 <div class="mt-4">
                     <div class="row text-600 text-white bgc-default-tp1 py-25">
-                        <div class="d-none d-sm-block col-2">Month</div>
+                       
                         <div class="col-3 col-sm-3">Subscription</div>
                         <div class="d-none d-sm-block col-3 col-sm-2">Transactions</div>
                         <div class="d-none d-sm-block col-4 col-sm-2">Amount</div>
@@ -35,7 +56,7 @@
                     {% for sub in subscriptions%}
                         <div class="text-95 text-secondary-d3">
                             <div class="row mb-2 mb-sm-0 py-25">
-                                <div class="d-none d-sm-block col-2">{{month}}</div>
+                                
                                 <div class="col-3 col-sm-3">{{sub.name}}</div>
                                 <div class="d-none d-sm-block col-2">{{sub.trans}}</div>
                                 <div class="d-none d-sm-block col-2">Kshs. {{sub.amount}}</div>
