@@ -193,7 +193,8 @@ def month_total(month):
 	subscriptions = []
 	total = 0
 	for idx, tran in enumerate(trans):
-		subscriptions.append({"name":tran[0], "amount":tran[1], "commission":round(float(tran[1])*0.05, 2), "index":idx+1})
+		m = mpesa.filter(my_subscription__subscription__name=tran[0])
+		subscriptions.append({"name":tran[0], "amount":tran[1], "commission":round(float(tran[1])*0.05, 2), "index":idx+1, "trans":len(m)})
 		total += round(float(tran[1])*0.05, 2)
 
 	return subscriptions, total
@@ -218,7 +219,7 @@ def admin_index(request):
 			month = int(month)
 			months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
 			subscriptions, total = month_total(month)
-			print(month)
+			
 			context = {
 				"month":months[month-1],
 				"subscriptions": subscriptions,

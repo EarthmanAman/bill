@@ -13,6 +13,7 @@ class BaseModel(models.Model):
 class Subscription(models.Model):
 	name 	= models.CharField(max_length=50)
 	pic 	= models.ImageField(upload_to="./subscriptions")
+	paybill	= models.CharField(max_length=50, null=True)
 
 	def __str__(self):
 		return self.name

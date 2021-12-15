@@ -66,7 +66,6 @@
 				      <th scope="col">Amount</th>
 				      <th scope="col">Paybale</th>
 				      <th scope="col">Pay</th>
-				      <th scope="col">Delete</th>
 				    </tr>
 				  </thead>
 				  <tbody>
@@ -83,9 +82,7 @@
 					      <td>
 					      	<a href="{% url 'mpesa_api:lipa_na_mpesa' pending_bill.id %}" class="btn btn-success">Pay</a>
 					      </td>
-					      <td>
-					      	<a href="{% url 'main:delete_bill' pending_bill.id %}" class="btn btn-danger">Del</a>
-					      </td>
+				
 					    </tr>
 				   {% endfor %}
 				  </tbody>
@@ -95,7 +92,7 @@
 			</div>
 
 			<div class="graph">
-				<h3>Payment Graph</h3>
+				<h3>Payment History</h3>
 				<canvas id="myChart" style="width:100%;width:400px" data-url="{% url 'main:chart' %}"></canvas>
 			</div>
 		</div>

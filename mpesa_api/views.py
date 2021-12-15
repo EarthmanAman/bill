@@ -7,30 +7,42 @@ import json
 from . mpesa_credential import MpesaAccessToken, LipanaMpesaPpassword
 from django.urls import reverse
 from .models import MpesaPayment
-from main.models import Bill
+from main.models import Bill, MySubscription
 from django_daraja.mpesa.core import MpesaClient
 from django.contrib import messages
+from django.utils import timezone
+import csv
 
-def index(request, bill_id):
-	cl = MpesaClient()
+
+def index(request, subscription_id):
 	# Use a Safaricom phone number that you have access to, for you to be able to view the prompt.
-	bill = get_object_or_404(Bill, pk=bill_id)
-	phone_number = '0' + str(bill.my_subscription.user.phone_number)
-	amount = 1
-	account_reference = 'reference'
-	transaction_desc = 'Description'
-	callback_url = request.build_absolute_uri(reverse('mpesa_api:mpesa_stk_push_callback'))
-	
-	response = cl.stk_push(phone_number, amount, account_reference, transaction_desc, callback_url)
+	sub = get_object_or_404(MySubscription, pk=bill_id)
+	transaction = request.POST.get("transaction")
+	with open(filename, 'r') as file:
+		reader = csv.reader(file)
+
+		for contents in reader:
+			if contents[0] == transaction:
+				amount = float(contents[1])
+				trns = MpesaPayment.objects.create(my_subscription=subscription, amount=bill.credit, created_at=timezone.now())
+				for bill in sub.bill_set.all():
+					if bill.credit > bill.debit:
+						payable = bill.credit - bill.debit
+						if amount > payable:
+							bill.debit = bill.credit
+							bill.save
+							amount = amount -payable
+						else:
+							bill.debit = bill.debit + amount
+							amount = 0
+							bill.save()
+				if amount > 0:
+					s = sub.bill_set.last()
+					s.debit = s.debit + amount
+					s.save()
 
 	
-	
-	bill.debit = bill.credit
-	bill.save()
-	subscription = bill.my_subscription
-
-	trns = MpesaPayment.objects.create(my_subscription=subscription, amount=bill.credit)
-	messages.add_message(request, messages.SUCCESS, 'Please enter your pin in the mpesa menu which will appear.')
+				messages.add_message(request, messages.SUCCESS, 'Payment was successful')
 
 
 	nex = request.GET.get('next', "/")
